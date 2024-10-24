@@ -1,0 +1,51 @@
+body {
+  font-family: "Lora", serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  height: 80px;
+  font-size: 20px;
+}
+.navbar-brand {
+  font-size: 50px;
+  padding: 10px;
+}
+.nav-item {
+  padding: 40px;
+}
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+  background-color: #eaeaea;
+  padding-top: 5rem;
+}
+
+.header {
+  position: relative;
+}
+
+.hero-image {
+  height: 30vh;
+  width: 100%;
+  background-image: url("../img/italian-bg.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.menu {
+  padding-top: 5rem;
+}
+
+.menu-item {
+  margin-bottom: 2rem;
+}
+
+.login{
+    margin: 10px; 
+}
