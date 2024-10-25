@@ -9,16 +9,23 @@
 
   <body class="d-flex flex-column min-vh-100">
     <header class="header">
-      <nav class="navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="{% url 'home' %}">La Tavola</a>
-        <div class="ml-auto">
-          {% if request.path != '/login/' and request.path != '/register/' %}
-            <img src="../static/img/cart.png" width="40px" style="margin-right: 10px" />
-            <a href="{% url 'login' %}" class="login btn btn-danger">Login</a>
-          {% endif %}
-        </div>
-      </nav>
-    </header>
+      <header class="header">
+        <nav class="navbar navbar-expand navbar-dark bg-dark">
+          <a class="navbar-brand" href="{% url 'home' %}">La Tavola</a>
+          <div class="ml-auto">
+            {% if request.path != '/login/' %}
+              <img src="../static/img/cart.png" width="40px" style="margin-right: 10px" />
+              {% if user.is_authenticated %}
+                <!-- Muestra la foto de perfil si está logueado -->
+                <img src="../static/img/user.png" width="40px" alt="Foto de perfil" />
+              {% else %}
+                <!-- Muestra el botón de login si no está logueado -->
+                <a href="{% url 'login' %}" class="login btn btn-danger">Login</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </nav>
+      </header>      
     <div class="flex-grow-1">
       {% block content %}
       {% endblock %}

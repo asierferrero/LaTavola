@@ -1,0 +1,40 @@
+<html>
+  <body>
+    {% extends 'base.html' %}
+    {% block content %}
+    <section class="login-section py-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-10">
+            <div class="card p-4 shadow">
+              <h2 class="text-center mb-4">Perfila</h2>
+              <div class="table-responsive"> 
+                <table class="table text-center" style="margin: 0 auto;">
+                  <tr>
+                    <td><strong>Izena</strong></td>
+                    <td><strong>Abizena</strong></td>
+                    <td><strong>Email-a</strong></td>
+                    <td><strong>Pasahitza</strong></td>
+                    <td><strong>Ordainketa Sistema</strong></td>
+                    <td></td>
+                   
+                  </tr>
+                  <tr>
+                    <td>Haritz</td>
+                    <td>Pacheco</td>
+                    <td>pacheco.haritz@uni.eus</td>
+                    <td>Admin123</td>
+                    <td>Paypal</td>
+                    <td>
+                   <img src="../static/img/pen-to-square-regular.png" width="20px"/></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endblock %}
+  </body>
+</html>

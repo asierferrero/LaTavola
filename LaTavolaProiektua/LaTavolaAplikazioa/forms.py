@@ -29,9 +29,9 @@ class LoginForm(forms.Form):
             try:
                 user = User.objects.get(email=email)
                 if not user.check_password(pasahitza):
-                    self.add_error('pasahitza', "Pasahitza okerra da.") 
+                    self.add_error('', "Zerbait txarto sartu duzu.") 
             except User.DoesNotExist:
-                self.add_error('email', "Erabiltzailea ez da existitzen.")
+                self.add_error('', "Zerbait txarto sartu duzu.")
 
         return cleaned_data
 

@@ -23,9 +23,8 @@ def login_view(request):
                 return render(request, 'login.html', {'form': form})
     else:
         form = LoginForm()
-
+    
     return render(request, 'login.html', {'form': form})
-
 
 def register_view(request):
     if request.method == 'POST':
@@ -39,3 +38,6 @@ def register_view(request):
         form = RegisterForm()
 
     return render(request, 'register.html', {'form': form})
+
+def profile_view(request):
+    return render(request, 'profile.html', {})
