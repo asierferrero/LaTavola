@@ -1,0 +1,49 @@
+<html>
+  <body>
+    {% extends 'base.html' %}
+    {% block content %}
+      <div class="hero-image"></div>
+      <section class="hero py-3">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <img src="../static/img/pasta.png" alt="Plato de Pasta" class="img-fluid rounded" />
+            </div>
+            <div class="col-md-6">
+              <h2 class="display-4">Italiar Janaria</h2>
+              <p>Gozatu gure plater tradizionalez zure etxeko erosotasunean.</p>
+              <a class="btn btn-danger btn-lg">Eskaera egin</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="menu" class="menu py-5">
+        <div class="container text-center">
+          <h2 class="display-4">Menua</h2>
+          <div class="row mt-4">
+            <div class="col-md-4">
+              <div class="menu-item card">
+                <img src="../static/img/pizza.png" alt="Pizza Margarita" class="card-img-top rounded" />
+                <div class="card-body">
+                  <h3 class="card-title">Margarita Pizza</h3>
+                  <p class="card-text">Italiar pizza klasikoa tomate, mozzarella eta albakarekin.</p>
+                  <a class="btn btn-danger">Eskatu</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="menu-item card">
+                <img src="../static/img/pasta.png" alt="Pasta Carbonara" class="card-img-top rounded" />
+                <div class="card-body">
+                  <h3 class="card-title">Carbonara Pasta</h3>
+                  <p class="card-text">Pasta goxoa arrautza, gazta eta hirugihar saltsa krematsuarekin.</p>
+                  <a class="btn btn-danger">Eskatu</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    {% endblock %}
+  </body>
+</html>
