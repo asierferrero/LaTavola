@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/styles.css" />
   </head>
 
-  <body>
+  <body class="d-flex flex-column min-vh-100">
     <header class="header">
       <nav class="navbar navbar-expand navbar-dark bg-dark">
         <a class="navbar-brand" href="{% url 'home' %}">La Tavola</a>
@@ -19,9 +19,8 @@
         </div>
       </nav>
     </header>
-    <div>
+    <div class="flex-grow-1">
       {% block content %}
-
       {% endblock %}
     </div>
     <footer class="bg-dark text-white py-3">
