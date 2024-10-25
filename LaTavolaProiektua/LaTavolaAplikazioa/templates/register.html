@@ -1,0 +1,86 @@
+<html>
+  <body>
+    {% extends 'base.html' %} {% block content %}
+    <section class="login-section py-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <div class="card p-4 shadow">
+              <h2 class="text-center mb-4">Erregistratu</h2>
+              <form class="needs-validation" id="form">
+                <div class="form-group">
+                  <label for="name">Izena</label>
+                  <input
+                    type="name"
+                    class="form-control"
+                    id="name"
+                    placeholder="Izena"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="surname">Abizena</label>
+                  <input
+                    type="surname"
+                    class="form-control"
+                    id="surname"
+                    placeholder="Abizena"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                    <label for="jaiotzedata">Jaiotze data</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="jaiotzedata"
+                      placeholder="Jaiotze data"
+                      required
+                    />
+                  </div>
+                  
+
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="Emaila"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="password">Pasahitza</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="Pasahitza"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="password2">Pasahitza konfirmatu</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password2"
+                    placeholder="Pasahitza sartu berriro"
+                    required
+                  />
+                </div>
+                <br/>
+
+                <button type="submit" class="btn btn-danger btn-block">
+                  Erregistratu
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endblock %}
+  </body>
+</html>
