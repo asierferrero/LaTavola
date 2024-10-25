@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.db import models
 
 class Erabiltzailea(models.Model):
@@ -5,12 +6,16 @@ class Erabiltzailea(models.Model):
     izena = models.CharField(max_length=100)
     abizena = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
+    pasahitza = models.CharField(max_length=128)
     jaiotze_data = models.DateField()
     helbidea = models.CharField(max_length=200)
 
     def __str__(self):
         return f"{self.izena} {self.abizena}"
 
+    def set_password(self, raw_password):
+        self.pasahitza = make_password(raw_password)
+        
 class Hornitzailea(models.Model):
     id = models.AutoField(primary_key=True)
     izena = models.CharField(max_length=100)

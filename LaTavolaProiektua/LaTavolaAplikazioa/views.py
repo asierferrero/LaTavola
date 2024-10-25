@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .forms import RegisterForm, LoginForm
 
 # Create your views here.
 
@@ -8,8 +9,24 @@ def main(request):
 
 
 def login(request):
-    return render(request, 'login.html', {})
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid:
+            login = form.save()
+            login.save()
+        return redirect('home')
+    else:
+        form = LoginForm()
+        return render(request, 'login.html', {'form': form})
 
 
 def register(request):
-    return render(request, 'register.html', {})
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid:
+            register = form.save()
+            register.save()
+        return redirect('home')
+    else:
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form})
