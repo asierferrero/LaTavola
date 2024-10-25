@@ -1,20 +1,37 @@
-from django.contrib.auth.hashers import make_password
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-class Erabiltzailea(models.Model):
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(email, password, **extra_fields)
+
+class Erabiltzailea(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     izena = models.CharField(max_length=100)
     abizena = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    pasahitza = models.CharField(max_length=128)
     jaiotze_data = models.DateField()
-    helbidea = models.CharField(max_length=200)
+    helbidea = models.CharField(max_length=200, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['izena', 'abizena']
 
     def __str__(self):
         return f"{self.izena} {self.abizena}"
-
-    def set_password(self, raw_password):
-        self.pasahitza = make_password(raw_password)
         
 class Hornitzailea(models.Model):
     id = models.AutoField(primary_key=True)

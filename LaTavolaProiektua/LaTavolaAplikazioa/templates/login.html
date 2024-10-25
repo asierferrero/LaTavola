@@ -10,16 +10,7 @@
                 <h2 class="text-center mb-4">Saioa hasi</h2>
                 <form method="POST" class="post-form needs-validation">
                   {% csrf_token %}
-                  <div class="form-group">
-                    {{ form.email.label_tag }}
-                    {{ form.email }}
-                    <div class="invalid-feedback">Mesedez, sartu email zuzen bat.</div>
-                  </div>
-                  <div class="form-group">
-                    {{ form.pasahitza.label_tag }}
-                    {{ form.pasahitza }}
-                    <div class="invalid-feedback">Mesedez, sartu zure pasahitza.</div>
-                  </div>
+                  {{ form.as_p }}
                   <button type="submit" class="btn btn-danger btn-block">Saioa hasi</button><br />
                   <a class="text-danger" href="{% url 'register' %}">Ez zaude erregistratuta?</a>
                 </form>
