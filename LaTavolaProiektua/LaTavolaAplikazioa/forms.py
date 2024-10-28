@@ -30,6 +30,8 @@ class LoginForm(forms.Form):
                 user = User.objects.get(email=email)
                 if not user.check_password(pasahitza):
                     self.add_error('', "Zerbait txarto sartu duzu.") 
+                elif not user.is_active:
+                    self.add_error(None, "Zure kontua ez dago egiaztatuta.")
             except User.DoesNotExist:
                 self.add_error('', "Zerbait txarto sartu duzu.")
 
