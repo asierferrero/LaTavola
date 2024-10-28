@@ -27,6 +27,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# HAU ALDATU LOKALEAN EZ BADA ERABILTZEN !!!!!!!!!!!
+SITE_URL = 'http://localhost:8000'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'latavola.jatetxea@gmail.com'
+EMAIL_HOST_PASSWORD = 'nnij xwll nzeh azhg'
+
+STATIC_URL = '/static/'
 
 # Application definition
 

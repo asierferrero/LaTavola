@@ -1,10 +1,11 @@
+{% load static %}
 <html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>La Tavola - Delivery zure etxera</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="../static/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
   </head>
 
   <body class="d-flex flex-column min-vh-100">
@@ -14,12 +15,10 @@
           <a class="navbar-brand" href="{% url 'home' %}">La Tavola</a>
           <div class="ml-auto">
             {% if request.path != '/login/' %}
-              <img src="../static/img/cart.png" width="40px" style="margin-right: 10px" />
+              <img src="{% static 'img/cart.png' %}" width="40px" style="margin-right: 10px" />
               {% if user.is_authenticated %}
-                <!-- Muestra la foto de perfil si está logueado -->
-                <a  href="{% url 'profile' %}"><img src="../static/img/user.png" width="30px" alt="Foto de perfil" /></a>
+                <img src="{% static 'img/user.png' %}" width="40px" alt="Foto de perfil" />
               {% else %}
-                <!-- Muestra el botón de login si no está logueado -->
                 <a href="{% url 'login' %}" class="login btn btn-danger">Login</a>
               {% endif %}
             {% endif %}
