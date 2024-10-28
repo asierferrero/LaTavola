@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% block content %} {% load socialaccount %}
+<section class="login-section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card p-4 shadow">
+          <h2 class="text-center mb-4">Saioa hasi</h2>
+          <formid="form">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Zure helbidea"
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Pasahitza</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                placeholder="Zure pasahitza"
+              />
+            </div>
+            <button type="submit" class="btn btn-danger btn-block">
+              Saioa hasi
+            </button>
+            <hr />
+            <form action="{% provider_login_url 'google' %}" method="POST">
+              {% csrf_token %}
+              <button
+                class="btn btn-light btn-block border"
+                id="google-login"
+                type="submit"
+              >
+                <img
+                  src="../static/img/google-icon.png"
+                  alt="Google"
+                  width="20px"
+                  style="margin-right: 8px"
+                />
+                Google-rekin saioa hasi
+              </button>
+            </form>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
