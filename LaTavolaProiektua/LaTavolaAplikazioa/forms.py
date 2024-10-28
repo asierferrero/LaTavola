@@ -2,6 +2,9 @@ from django import forms
 from .models import Erabiltzailea
 from django.contrib.auth import get_user_model
 
+
+
+
 User = get_user_model()
 
 class LoginForm(forms.Form):
@@ -80,3 +83,31 @@ class RegisterForm(forms.ModelForm):
         if Erabiltzailea.objects.filter(email=email).exists():
             raise forms.ValidationError("Email hau erregistratuta dago.")
         return email
+    
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Erabiltzailea
+        fields = ['izena', 'abizena', 'email', 'jaiotze_data']
+        widgets = {
+            'izena': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Sartu zure izena',
+                'required': True
+            }),
+            'abizena': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Sartu zure abizena',
+                'required': True
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Sartu zure emaila',
+                'required': True
+            }),
+            'jaiotze_data': forms.DateInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Jaiotze data',
+                'type': 'date',
+                'required': True
+            }),
+        }
