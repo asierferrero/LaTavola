@@ -20,7 +20,7 @@ class Erabiltzailea(AbstractBaseUser, PermissionsMixin):
     izena = models.CharField(max_length=100)
     abizena = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    jaiotze_data = models.DateField()
+    jaiotze_data = models.DateField(null=True, blank=True)
     helbidea = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

@@ -8,9 +8,6 @@ from .tokens import generate_token
 from django.contrib.auth.decorators import login_required
 
 
-# Create your views here.
-
-
 def main(request):
     return render(request, 'home.html', {})
 
