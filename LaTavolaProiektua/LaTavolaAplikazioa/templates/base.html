@@ -17,7 +17,7 @@
               <img src="../static/img/cart.png" width="40px" style="margin-right: 10px" />
               {% if user.is_authenticated %}
                 <!-- Muestra la foto de perfil si está logueado -->
-                <img src="../static/img/user.png" width="40px" alt="Foto de perfil" />
+                <a  href="{% url 'profile' %}"><img src="../static/img/user.png" width="30px" alt="Foto de perfil" /></a>
               {% else %}
                 <!-- Muestra el botón de login si no está logueado -->
                 <a href="{% url 'login' %}" class="login btn btn-danger">Login</a>
