@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SITE_ID = 4
+SITE_ID = 6
+
 # HAU ALDATU LOKALEAN EZ BADA ERABILTZEN !!!!!!!!!!!
 SITE_URL = 'http://localhost:8000'
 
@@ -106,7 +107,7 @@ WSGI_APPLICATION = 'LaTavolaProiektua.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'latavolaprueba1',
+        'NAME': 'latavolaprueba',
         'USER': 'root',
         'PASSWORD': 'Admin123',
         'HOST': 'localhost',
@@ -133,8 +134,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-AUTH_USER_MODEL = 'LaTavolaAplikazioa.Erabiltzailea'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 
 class UserManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
@@ -25,6 +25,8 @@ class Erabiltzailea(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     token = models.CharField(max_length=255, blank=True, null=True)
+    groups = models.ManyToManyField(Group, related_name='custom_user_groups', blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name='custom_user_permissions', blank=True)
 
     objects = UserManager()
 

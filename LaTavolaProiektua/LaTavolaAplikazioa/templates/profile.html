@@ -14,11 +14,11 @@
               <table class="table text-center" style="margin: 0 auto;">
                 <tr>
                   <td><strong>Izena</strong></td>
-                  <td><input type="text" name="izena" value="{{ user_profile.izena }}" class="form-control"></td>
+                  <td><input type="text" name="izena" value="{{ user_profile.first_name }}" class="form-control"></td>
                 </tr>
                 <tr>
-                  <td><strong>Abizena</strong></td>
-                  <td><input type="text" name="abizena" value="{{ user_profile.abizena }}" class="form-control"></td>
+                  <td><strong>Abizenak</strong></td>
+                  <td><input type="text" name="abizena" value="{{ user_profile.last_name }}" class="form-control"></td>
                 </tr>
                 <tr>
                   <td><strong>Email-a</strong></td>
@@ -44,11 +44,11 @@
               <table class="table text-center" style="margin: 0 auto;">
                 <tr>
                   <td><strong>Izena</strong></td>
-                  <td>{{ user_profile.izena }}</td>
+                  <td>{{ user_profile.first_name }}</td>
                 </tr>
                 <tr>
-                  <td><strong>Abizena</strong></td>
-                  <td>{{ user_profile.abizena }}</td>
+                  <td><strong>Abizenak</strong></td>
+                  <td>{{ user_profile.last_name }}</td>
                 </tr>
                 <tr>
                   <td><strong>Email-a</strong></td>

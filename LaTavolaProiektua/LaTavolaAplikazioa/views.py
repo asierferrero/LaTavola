@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import RegisterForm, LoginForm, ProfileForm
-from .models import Erabiltzailea
 from .tokens import generate_token
 from django.contrib.auth.decorators import login_required
 
+User = get_user_model()
 
 def main(request):
     return render(request, 'home.html', {})
@@ -62,7 +62,7 @@ def send_verification_email(user):
     send_mail(subject, message, settings.EMAIL_HOST_USER, [user.username])
 
 def verify_view(request, user_id, token):
-    user = Erabiltzailea.objects.get(id=user_id)
+    user = User.objects.get(id=user_id)
     if user.token == token:
         user.is_active = True
         user.save()
@@ -73,7 +73,7 @@ def verify_view(request, user_id, token):
 
 @login_required
 def profile_view(request):
-    user_profile = Erabiltzailea.objects.get(id=request.user.id)
+    user_profile = User.objects.get(id=request.user.id)
 
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=user_profile)
