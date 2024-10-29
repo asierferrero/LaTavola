@@ -16,10 +16,10 @@ def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
+            username = form.cleaned_data['username']
             password = form.cleaned_data['pasahitza']
 
-            user = authenticate(request, username=email, password=password)
+            user = authenticate(request, username=username, password=password)
 
             if user is not None:
                 if user.is_active:
@@ -59,8 +59,7 @@ def send_verification_email(user):
     subject = "Zure kontua egiaztatu"
     message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {
         verification_url}"
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
-
+    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.username])
 
 def verify_view(request, user_id, token):
     user = Erabiltzailea.objects.get(id=user_id)

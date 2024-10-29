@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SITE_ID = 3
+SITE_ID = 4
 # HAU ALDATU LOKALEAN EZ BADA ERABILTZEN !!!!!!!!!!!
 SITE_URL = 'http://localhost:8000'
 
@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'LaTavolaProiektua.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'latavolaprueba',
+        'NAME': 'latavolaprueba1',
         'USER': 'root',
         'PASSWORD': 'Admin123',
         'HOST': 'localhost',
@@ -168,3 +168,5 @@ LOGOUT_REDIRECT_URL = "/"
 
 DEBUG=True
 LOGOUT_REDIRECT_URL = 'home' 
+
+ACCOUNT_USER_MODEL_EMAIL_FIELD = "username"
