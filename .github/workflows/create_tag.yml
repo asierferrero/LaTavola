@@ -1,0 +1,32 @@
+name: Create Tag
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get latest release tag
+        id: get_tag
+        run: |
+          TAG=$(git log -1 --pretty=format:%s | grep -oP 'Release \K\d+\.\d+\.\d+')
+          echo "TAG_NAME=$TAG" >> $GITHUB_ENV
+
+      - name: Create Tag
+        run: |
+          if [ -n "${{ env.TAG_NAME }}" ]; then
+            git tag "v${{ env.TAG_NAME }}"
+            git push origin "v${{ env.TAG_NAME }}"
+          else
+            echo "No valid tag found."
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
