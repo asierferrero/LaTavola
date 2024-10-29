@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(
+    username = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
             'placeholder': 'Sartu zure emaila',
@@ -22,12 +22,12 @@ class LoginForm(forms.Form):
     
     def clean(self):
         cleaned_data = super().clean()
-        email = cleaned_data.get("email")
+        username = cleaned_data.get("username")
         pasahitza = cleaned_data.get("pasahitza")
 
-        if email and pasahitza:
+        if username and pasahitza:
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.get(username=username)
                 if not user.check_password(pasahitza):
                     self.add_error('', "Zerbait txarto sartu duzu.") 
                 elif not user.is_active:
@@ -50,7 +50,7 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = Erabiltzailea
-        fields = ['izena', 'abizena', 'jaiotze_data', 'email', 'pasahitza']
+        fields = ['izena', 'abizena', 'jaiotze_data', 'username', 'pasahitza']
         widgets = {
             'izena': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -68,7 +68,7 @@ class RegisterForm(forms.ModelForm):
                 'type': 'date',
                 'required': True
             }),
-            'email': forms.EmailInput(attrs={
+            'username': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Sartu zure emaila',
                 'required': True
@@ -76,15 +76,15 @@ class RegisterForm(forms.ModelForm):
         }
 
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if Erabiltzailea.objects.filter(email=email).exists():
+        username = self.cleaned_data.get('username')
+        if Erabiltzailea.objects.filter(username=username).exists():
             raise forms.ValidationError("Email hau erregistratuta dago.")
-        return email
+        return username
     
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Erabiltzailea
-        fields = ['izena', 'abizena', 'email', 'jaiotze_data']
+        fields = ['izena', 'abizena', 'username', 'jaiotze_data']
         widgets = {
             'izena': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -96,7 +96,7 @@ class ProfileForm(forms.ModelForm):
                 'placeholder': 'Sartu zure abizena',
                 'required': True
             }),
-            'email': forms.EmailInput(attrs={
+            'username': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Sartu zure emaila',
                 'required': True
