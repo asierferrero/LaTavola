@@ -2,7 +2,7 @@
   <body>
     {% extends 'base.html' %}
     {% block content %}
-    {% load socialaccount %}
+      {% load socialaccount %}
       <section class="login-section py-5">
         <div class="container">
           <div class="row justify-content-center">
@@ -15,21 +15,11 @@
                   <button type="submit" class="btn btn-danger btn-block">Saioa hasi</button><br />
                   <a class="text-danger" href="{% url 'register' %}">Ez zaude erregistratuta?</a>
                 </form>
-
-                <hr />
+                <hr>
                 <form action="{% provider_login_url 'google' %}" method="POST">
                   {% csrf_token %}
-                  <button
-                    class="btn btn-light btn-block border"
-                    id="google-login"
-                    type="submit"
-                  >
-                    <img
-                      src="../static/img/google-icon.png"
-                      alt="Google"
-                      width="20px"
-                      style="margin-right: 8px"
-                    />
+                  <button class="btn btn-light btn-block border" id="google-login" type="submit">
+                    <img src="../static/img/google-icon.png" alt="Google" width="20px" style="margin-right: 8px" />
                     Google-rekin saioa hasi
                   </button>
                 </form>

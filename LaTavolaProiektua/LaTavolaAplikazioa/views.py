@@ -64,6 +64,9 @@ def verify_view(request, id, username):
     if user.username == username:
         user.is_active = True
         user.save()
+        
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        
         return render(request, 'verify.html', {'success': 'Zure kontua egiaztatu da'})
     else:
         return render(request, 'verify.html', {'error': 'Zure kontua ezin izan da egiaztatu'})
