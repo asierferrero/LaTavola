@@ -33,7 +33,7 @@
                       <strong>Email-a</strong>
                     </td>
                     <td>
-                      <input type="email" name="email" value="{{ user_profile.email }}" class="form-control" />
+                      <input type="email" name="username" value="{{ user_profile.username }}" class="form-control" />
                     </td>
                   </tr>
                   {% comment %} <tr>
@@ -72,7 +72,7 @@
                     <td>
                       <strong>Email-a</strong>
                     </td>
-                    <td>{{ user_profile.email }}</td>
+                    <td>{{ user_profile.username }}</td>
                   </tr>
                   {% comment %} <tr>
                     <td>
@@ -83,7 +83,7 @@
 
                   <tr>
                     <td colspan="2">
-                      <button class="btn btn-dark" onclick="editProfile()"><img src="{% static 'img/pen-blanco.png' %}" width="20px" /></button>
+                      <button class="btn btn-info" onclick="editProfile()"><img src="{% static 'img/pen-to-square-regular.png' %}" width="20px" /></button>
                     </td>
                   </tr>
                 </table>
