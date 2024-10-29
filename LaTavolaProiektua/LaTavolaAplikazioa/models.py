@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
+from django.contrib.auth.models import BaseUserManager, User
 
 class UserManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
@@ -14,27 +14,6 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
 
         return self.create_user(username, password, **extra_fields)
-
-class Erabiltzailea(AbstractBaseUser, PermissionsMixin):
-    id = models.AutoField(primary_key=True)
-    izena = models.CharField(max_length=100)
-    abizena = models.CharField(max_length=100)
-    username = models.EmailField(unique=True)
-    jaiotze_data = models.DateField(null=True, blank=True)
-    helbidea = models.CharField(max_length=200, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    token = models.CharField(max_length=255, blank=True, null=True)
-    groups = models.ManyToManyField(Group, related_name='custom_user_groups', blank=True)
-    user_permissions = models.ManyToManyField(Permission, related_name='custom_user_permissions', blank=True)
-
-    objects = UserManager()
-
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['izena', 'abizena']
-
-    def __str__(self):
-        return f"{self.izena} {self.abizena}"
         
 class Hornitzailea(models.Model):
     id = models.AutoField(primary_key=True)
@@ -80,7 +59,7 @@ class AlergenoProduktua(models.Model):
 
 class Eskaria(models.Model):
     id = models.AutoField(primary_key=True)
-    erabiltzailea = models.ForeignKey(Erabiltzailea, on_delete=models.CASCADE)
+    erabiltzailea = models.ForeignKey(User, on_delete=models.CASCADE)
     produktua = models.ForeignKey(Produktua, on_delete=models.CASCADE)
     langilea = models.ForeignKey(Langilea, on_delete=models.CASCADE)
     banatzailea = models.CharField(max_length=100)
@@ -90,7 +69,7 @@ class Eskaria(models.Model):
 
 class Iritzia(models.Model):
     id = models.AutoField(primary_key=True)
-    erabiltzailea = models.ForeignKey(Erabiltzailea, on_delete=models.CASCADE)
+    erabiltzailea = models.ForeignKey(User, on_delete=models.CASCADE)
     testua = models.TextField()
     izarrak = models.IntegerField()
 

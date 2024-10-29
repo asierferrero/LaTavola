@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import RegisterForm, LoginForm, ProfileForm
-from .tokens import generate_token
 from django.contrib.auth.decorators import login_required
+from django.utils.encoding import force_bytes
 
 User = get_user_model()
 
@@ -17,7 +17,7 @@ def login_view(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
-            password = form.cleaned_data['pasahitza']
+            password = form.cleaned_data['password']
 
             user = authenticate(request, username=username, password=password)
 
@@ -37,7 +37,7 @@ def register_view(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['pasahitza'])
+            user.set_password(form.cleaned_data['password'])
             user.is_active = False  # Erabiltzailea ez dago aktibatuta emaila egiaztatu arte
             user.save()
 
@@ -52,18 +52,16 @@ def register_view(request):
 
 
 def send_verification_email(user):
-    token = generate_token(user)
-    user.token = token
-    user.save()
-    verification_url = f"{settings.SITE_URL}/verify/{user.id}/{token}"
+    verification_url = f"{settings.SITE_URL}/verify/{user.id}/{user.username}/"
     subject = "Zure kontua egiaztatu"
-    message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {
-        verification_url}"
+    message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {verification_url}"
     send_mail(subject, message, settings.EMAIL_HOST_USER, [user.username])
 
-def verify_view(request, user_id, token):
-    user = User.objects.get(id=user_id)
-    if user.token == token:
+
+def verify_view(request, id, username):
+    user = User.objects.get(id=id)
+    
+    if user.username == username:
         user.is_active = True
         user.save()
         return render(request, 'verify.html', {'success': 'Zure kontua egiaztatu da'})
