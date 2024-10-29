@@ -2,41 +2,30 @@
 {% load static %}
 
 {% block content %}
-  <section class="login-section py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-10">
-          <div class="card p-4 shadow">
-            <h2 class="text-center mb-4">Perfila</h2>
-            <div class="table-responsive">
-              <form id="edit-form" method="POST" style="display: none;">
-                {% csrf_token %}
-                <table class="table text-center" style="margin: 0 auto;">
-                  <tr>
-                    <td>
-                      <strong>Izena</strong>
-                    </td>
-                    <td>
-                      <input type="text" name="izena" value="{{ user_profile.first_name }}" class="form-control" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>Abizenak</strong>
-                    </td>
-                    <td>
-                      <input type="text" name="abizena" value="{{ user_profile.last_name }}" class="form-control" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>Email-a</strong>
-                    </td>
-                    <td>
-                      <input type="email" name="username" value="{{ user_profile.username }}" class="form-control" />
-                    </td>
-                  </tr>
-                  {% comment %} <tr>
+<section class="login-section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="card p-4 shadow">
+          <h2 class="text-center mb-4">Perfila</h2>
+          <div class="table-responsive">
+            <form id="edit-form" method="POST" style="display: none;">
+              {% csrf_token %}
+              <table class="table text-center" style="margin: 0 auto;">
+                {{ form.non_field_errors }}
+                <tr>
+                  <td><strong>Izena</strong></td>
+                  <td>{{ form.first_name }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Abizenak</strong></td>
+                  <td>{{ form.last_name }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Email-a</strong></td>
+                  <td>{{ form.username }}</td>
+                </tr>
+                 {% comment %} <tr>
                     <td>
                       <strong>Jaiotze Data</strong>
                     </td>
@@ -44,69 +33,61 @@
                       <input type="date" name="jaiotze_data" value="{{ user_profile.jaiotze_data|date:'Y-m-d' }}" class="form-control" />
                     </td>
                   </tr> {% endcomment %}
+                <tr>
+                  <td colspan="2">
+                    <button type="submit" class="btn btn btn-danger">Gorde aldaketak</button>
+                    <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Utzi</button>
+                  </td>
+                </tr>
+              </table>
+            </form>
 
-                  <tr>
-                    <td colspan="2">
-                      <button type="submit" class="btn btn btn-danger">Gorde aldaketak</button>
-                      <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Utzi</button>
-                    </td>
-                  </tr>
-                </table>
-              </form>
-
-              <div id="profile-info" style="display: block;">
-                <table class="table text-center" style="margin: 0 auto;">
-                  <tr>
-                    <td>
-                      <strong>Izena</strong>
-                    </td>
-                    <td>{{ user_profile.first_name }}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>Abizenak</strong>
-                    </td>
-                    <td>{{ user_profile.last_name }}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>Email-a</strong>
-                    </td>
-                    <td>{{ user_profile.username }}</td>
-                  </tr>
+            <div id="profile-info" style="display: block;">
+              <table class="table text-center" style="margin: 0 auto;">
+                <tr>
+                  <td><strong>Izena</strong></td>
+                  <td>{{ user_profile.first_name }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Abizena</strong></td>
+                  <td>{{ user_profile.last_name }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Email-a</strong></td>
+                  <td>{{ user_profile.username }}</td>
+                </tr>
                   {% comment %} <tr>
                     <td>
                       <strong>Jaiotze Data</strong>
                     </td>
                     <td>{{ user_profile.jaiotze_data }}</td>
                   </tr> {% endcomment %}
-
-                  <tr>
-                    <td colspan="2">
-                      <button class="btn btn-info" onclick="editProfile()"><img src="{% static 'img/pen-to-square-regular.png' %}" width="20px" /></button>
-                    </td>
-                  </tr>
-                </table>
-              </div>
+                <tr>
+                  <td colspan="2">
+                    <button class="btn btn-info" onclick="editProfile()">Editatu</button>
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
         </div>
       </div>
-      <div class="text-center mt-4">
-        <a href="{% url 'logout' %}" class="logout btn btn-danger">Saioa Itxi</a>
-      </div>
     </div>
-  </section>
+    <div class="text-center mt-4">
+      <a href="{% url 'logout' %}" class="logout btn btn-danger">Saioa Itxi</a>
+    </div>
+  </div>
+</section>
 
-  <script>
-    function editProfile() {
-      document.getElementById('edit-form').style.display = 'block'
-      document.getElementById('profile-info').style.display = 'none'
-    }
-    
-    function cancelEdit() {
-      document.getElementById('edit-form').style.display = 'none'
-      document.getElementById('profile-info').style.display = 'block'
-    }
-  </script>
+<script>
+  function editProfile() {
+    document.getElementById('edit-form').style.display = 'block';
+    document.getElementById('profile-info').style.display = 'none';
+  }
+  
+  function cancelEdit() {
+    document.getElementById('edit-form').style.display = 'none';
+    document.getElementById('profile-info').style.display = 'block';
+  }
+</script>
 {% endblock %}
