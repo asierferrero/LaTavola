@@ -28,6 +28,17 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 SITE_ID = 3
+# HAU ALDATU LOKALEAN EZ BADA ERABILTZEN !!!!!!!!!!!
+SITE_URL = 'http://localhost:8000'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'latavola.jatetxea@gmail.com'
+EMAIL_HOST_PASSWORD = 'nnij xwll nzeh azhg'
+
+STATIC_URL = '/static/'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -123,6 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'LaTavolaAplikazioa.Erabiltzailea'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -155,3 +167,4 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
 DEBUG=True
+LOGOUT_REDIRECT_URL = 'home' 
