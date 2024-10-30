@@ -10,7 +10,7 @@
   <body class="d-flex flex-column min-vh-100">
     <header class="header">
       <nav class="navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="{% url 'home' %}">La Tavola</a>
+        <a class="navbar-brand" href="{% url 'home' %}"> <img src="{% static 'img/logo.png' %}" width="70px"/></a>
         <div class="ml-auto">
           {% if request.path != '/login/' and request.path != '/register/' %}
             <img src="{% static 'img/cart.png' %}" width="40px" style="margin-right: 10px" />
@@ -34,6 +34,6 @@
       </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="{% static 'js/pizzas.js' %}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>    
   </body>
 </html>

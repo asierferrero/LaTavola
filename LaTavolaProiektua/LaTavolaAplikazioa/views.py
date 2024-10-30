@@ -92,6 +92,3 @@ def profile_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
-
-def eskatu(request):
-    return render(request, 'eskatu.html', {})
