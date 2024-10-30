@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SITE_ID = 7
+SITE_ID = 3
 
 # HAU ALDATU LOKALEAN EZ BADA ERABILTZEN !!!!!!!!!!!
 SITE_URL = 'http://localhost:8000'
