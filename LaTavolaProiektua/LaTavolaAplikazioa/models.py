@@ -14,13 +14,6 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
 
         return self.create_user(username, password, **extra_fields)
-        
-class Hornitzailea(models.Model):
-    id = models.AutoField(primary_key=True)
-    izena = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.izena
 
 class Langilea(models.Model):
     id = models.AutoField(primary_key=True)
@@ -42,20 +35,14 @@ class Alergeno(models.Model):
 class Produktua(models.Model):
     id = models.AutoField(primary_key=True)
     izena = models.CharField(max_length=100)
-    stock = models.IntegerField()
-    hornitzaile = models.ForeignKey(Hornitzailea, on_delete=models.CASCADE)
+    deskripzioa = models.CharField(max_length=300)
+    alergenoak = models.ManyToManyField(Alergeno)
+    img = models.CharField(max_length=100)
     prezioa = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.IntegerField()
 
     def __str__(self):
         return self.izena
-
-class AlergenoProduktua(models.Model):
-    id = models.AutoField(primary_key=True)
-    produktua = models.ForeignKey(Produktua, on_delete=models.CASCADE)
-    alergeno = models.ForeignKey(Alergeno, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.produktua}{self.alergeno}"
 
 class Eskaria(models.Model):
     id = models.AutoField(primary_key=True)
