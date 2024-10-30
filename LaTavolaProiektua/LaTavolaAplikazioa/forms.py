@@ -6,6 +6,7 @@ User = get_user_model()
 
 class LoginForm(forms.Form):
     username = forms.EmailField(
+        label='Emaila',
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
             'placeholder': 'Sartu zure emaila',
@@ -13,6 +14,7 @@ class LoginForm(forms.Form):
         })
     )
     password = forms.CharField(
+        label='Pasahitza',
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Sartu zure pasahitza',
@@ -39,34 +41,44 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.ModelForm):
+    first_name = forms.CharField(
+        label='Izena',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Sartu zure izena',
+            'required': True
+        })
+    )
+    last_name = forms.CharField(
+        label='Abizena',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Sartu zure abizena',
+            'required': True
+        })
+    )
+    username = forms.EmailField(
+        label='Emaila',
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Sartu zure emaila',
+            'required': True
+        })
+    )
+    password = forms.CharField(
+        label='Pasahitza',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Sartu zure pasahitza',
+            'required': True
+        })
+    )
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'password']
-        widgets = {
-            'first_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Sartu zure izena',
-                'required': True
-            }),
-            'last_name': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Sartu zure abizena',
-                'required': True
-            }),
-            'username': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Sartu zure emaila',
-                'required': True
-            }),
-            'password': forms.DateInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Sartu zure pasahitza',
-                'type': 'password',
-                'required': True
-            }),
-        }
 
-    def clean_email(self):
+    def clean_username(self):
         username = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError("Email hau erregistratuta dago.")

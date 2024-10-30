@@ -2,30 +2,36 @@
 {% load static %}
 
 {% block content %}
-<section class="login-section py-5">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-10">
-        <div class="card p-4 shadow">
-          <h2 class="text-center mb-4">Perfila</h2>
-          <div class="table-responsive">
-            <form id="edit-form" method="POST" style="display: none;">
-              {% csrf_token %}
-              <table class="table text-center" style="margin: 0 auto;">
-                {{ form.non_field_errors }}
-                <tr>
-                  <td><strong>Izena</strong></td>
-                  <td>{{ form.first_name }}</td>
-                </tr>
-                <tr>
-                  <td><strong>Abizenak</strong></td>
-                  <td>{{ form.last_name }}</td>
-                </tr>
-                <tr>
-                  <td><strong>Email-a</strong></td>
-                  <td>{{ form.username }}</td>
-                </tr>
-                 {% comment %} <tr>
+  <section class="login-section py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="card p-4 shadow">
+            <h2 class="text-center mb-4">Perfila</h2>
+            <div class="table-responsive">
+              <form id="edit-form" method="POST" style="display: none;">
+                {% csrf_token %}
+                <table class="table text-center" style="margin: 0 auto;">
+                  {{ form.non_field_errors }}
+                  <tr>
+                    <td>
+                      <strong>Izena</strong>
+                    </td>
+                    <td>{{ form.first_name }}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Abizena/k</strong>
+                    </td>
+                    <td>{{ form.last_name }}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Email-a</strong>
+                    </td>
+                    <td>{{ form.username }}</td>
+                  </tr>
+                  {% comment %} <tr>
                     <td>
                       <strong>Jaiotze Data</strong>
                     </td>
@@ -33,29 +39,34 @@
                       <input type="date" name="jaiotze_data" value="{{ user_profile.jaiotze_data|date:'Y-m-d' }}" class="form-control" />
                     </td>
                   </tr> {% endcomment %}
-                <tr>
-                  <td colspan="2">
-                    <button type="submit" class="btn btn btn-danger">Gorde aldaketak</button>
-                    <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Utzi</button>
-                  </td>
-                </tr>
-              </table>
-            </form>
-
-            <div id="profile-info" style="display: block;">
-              <table class="table text-center" style="margin: 0 auto;">
-                <tr>
-                  <td><strong>Izena</strong></td>
-                  <td>{{ user_profile.first_name }}</td>
-                </tr>
-                <tr>
-                  <td><strong>Abizena</strong></td>
-                  <td>{{ user_profile.last_name }}</td>
-                </tr>
-                <tr>
-                  <td><strong>Email-a</strong></td>
-                  <td>{{ user_profile.username }}</td>
-                </tr>
+                  <tr>
+                    <td colspan="2">
+                      <button type="submit" class="btn btn btn-danger">Gorde</button>
+                      <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Utzi</button>
+                    </td>
+                  </tr>
+                </table>
+              </form>
+              <div id="profile-info" style="display: block;">
+                <table class="table text-center" style="margin: 0 auto;">
+                  <tr>
+                    <td>
+                      <strong>Izena</strong>
+                    </td>
+                    <td>{{ user_profile.first_name }}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Abizena/k</strong>
+                    </td>
+                    <td>{{ user_profile.last_name }}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Email-a</strong>
+                    </td>
+                    <td>{{ user_profile.username }}</td>
+                  </tr>
                   {% comment %} <tr>
                     <td>
                       <strong>Jaiotze Data</strong>
@@ -64,30 +75,30 @@
                   </tr> {% endcomment %}
                   <tr>
                     <td colspan="2">
-                      <button class="btn btn-info" style="margin-top: 15px;" onclick="editProfile()" ><img src="{% static 'img/pen-blanco.png' %}" width="20px" /></button>
+                      <button class="btn btn-info" style="margin-top: 15px;" onclick="editProfile()"><img src="{% static 'img/pen-blanco.png' %}" width="20px" /></button>
                     </td>
                   </tr>
-              </table>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="text-center mt-4">
+        <a href="{% url 'logout' %}" class="logout btn btn-danger">Saioa Itxi</a>
+      </div>
     </div>
-    <div class="text-center mt-4">
-      <a href="{% url 'logout' %}" class="logout btn btn-danger">Saioa Itxi</a>
-    </div>
-  </div>
-</section>
+  </section>
 
-<script>
-  function editProfile() {
-    document.getElementById('edit-form').style.display = 'block';
-    document.getElementById('profile-info').style.display = 'none';
-  }
-  
-  function cancelEdit() {
-    document.getElementById('edit-form').style.display = 'none';
-    document.getElementById('profile-info').style.display = 'block';
-  }
-</script>
+  <script>
+    function editProfile() {
+      document.getElementById('edit-form').style.display = 'block'
+      document.getElementById('profile-info').style.display = 'none'
+    }
+    
+    function cancelEdit() {
+      document.getElementById('edit-form').style.display = 'none'
+      document.getElementById('profile-info').style.display = 'block'
+    }
+  </script>
 {% endblock %}
