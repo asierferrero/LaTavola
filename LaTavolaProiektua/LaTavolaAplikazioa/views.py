@@ -11,6 +11,9 @@ User = get_user_model()
 def main(request):
     return render(request, 'home.html', {})
 
+@login_required
+def admin_home_view(request):
+    return render(request, 'admin_home.html')
 
 def login_view(request):
     if request.method == 'POST':
@@ -24,7 +27,10 @@ def login_view(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('home')
+                    if user.is_staff:
+                        return redirect('admin_home')
+                    else:
+                        return redirect('home')
 
     else:
         form = LoginForm()

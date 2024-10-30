@@ -169,3 +169,5 @@ DEBUG=True
 LOGOUT_REDIRECT_URL = 'home' 
 
 ACCOUNT_USER_MODEL_EMAIL_FIELD = "username"
+
+LOGIN_URL = 'login'  
