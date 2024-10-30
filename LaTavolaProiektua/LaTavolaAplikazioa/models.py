@@ -35,9 +35,9 @@ class Alergeno(models.Model):
 class Produktua(models.Model):
     id = models.AutoField(primary_key=True)
     izena = models.CharField(max_length=100)
-    deskripzioa = models.CharField(max_length=300)
+    deskripzioa = models.CharField(max_length=300, null=True)
     alergenoak = models.ManyToManyField(Alergeno)
-    img = models.CharField(max_length=100)
+    img = models.CharField(max_length=100, null=True)
     prezioa = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.IntegerField()
 
