@@ -1,4 +1,3 @@
-// "DOMContentLoaded" es un evento que se dispara en el navegador cuando el documento HTML inicial ha sido completamente cargado y analizado
 document.addEventListener("DOMContentLoaded", function() {
     fetch("/static/json/pizzak.json")
         .then(response => {
@@ -11,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function() {
             const menuItemsContainer = document.getElementById("menu-items");
 
             data.forEach(item => {
-                // Crear HTML para cada elemento de menú
                 const menuItem = document.createElement("div");
                 menuItem.className = "col-md-4";
                 menuItem.innerHTML = `
