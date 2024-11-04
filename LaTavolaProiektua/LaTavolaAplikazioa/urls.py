@@ -9,4 +9,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('saskia/', views.saskia, name='saskia'),
     path('verify/<int:id>/', views.verify_view, name='verify'),
+    path('v1/ikasle', views.Produktuak_APIView.as_view()),
+    path('v1/ikasle/<int:pk>/', views.Produktuak_APIView_Detail.as_view())
 ]

@@ -6,6 +6,12 @@ from .forms import RegisterForm, LoginForm, ProfileForm
 from .models import Produktua
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import IkasleSerializers
+from rest_framework import status
+from django.http import Http404
 
 User = get_user_model()
 
@@ -107,3 +113,40 @@ def logout_view(request):
 
 def saskia(request):
     return render(request, 'saskia.html', {})
+
+class Produktuak_APIView(APIView):
+    def get(self, request, format=None, *args, **kwargs):
+        produktuak = Produktua.objects.all()
+        serializer = IkasleSerializers(produktuak, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request, format=None):
+        serializer = IkasleSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+class Produktuak_APIView_Detail(APIView):
+    def get_object(self, pk):
+        try:
+            return Produktua.objects.get(pk=pk)
+        except Produktua.DoesNotExist:
+            raise Http404
+    def get(self, request, pk, format=None):
+        ikasle = self.get_object(pk)
+        serializer = IkasleSerializers(ikasle)
+        return Response(serializer.data)
+    
+    def put(self, request, pk, format=None):
+        ikasle = self.get_object(pk)
+        serializer = IkasleSerializers(ikasle, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,
+status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        ikasle = self.get_object(pk)
+        ikasle.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
