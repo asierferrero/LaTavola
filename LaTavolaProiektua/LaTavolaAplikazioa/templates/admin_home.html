@@ -1,1 +1,16 @@
-<p>Hola<p>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %} 
+
+  {% csrf_token %}
+  
+  <h1 class="text-center">Kaixo: {{ user_profile.username }}</h1>
+
+  <div class="d-flex justify-content-center align-items-center vh-50">
+    <a href="{% url 'bezeroak-list' %}"><button class="btn btn-primary mx-2">Bezeroak kudeatu</button></a>
+    <a href="{% url 'produktuak-list' %}"><button class="btn btn-primary mx-2">Produktuak kudeatu</button></a>
+    <button class="btn btn-primary mx-2">Eskariak kudetau</button>
+  </div>
+
+{% endblock %}

@@ -3,8 +3,10 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import RegisterForm, LoginForm, ProfileForm
+from .models import Produktua
 from django.contrib.auth.decorators import login_required
 from django.utils.encoding import force_bytes
+from django.contrib.auth.models import User
 
 User = get_user_model()
 
@@ -13,7 +15,19 @@ def main(request):
 
 @login_required
 def admin_home_view(request):
-    return render(request, 'admin_home.html')
+    user_profile = User.objects.get(id=request.user.id)
+    return render(request, 'admin_home.html', {'user_profile': user_profile})
+
+@login_required
+def admin_bezeroak_list(request):
+    BezeroZerrenda = User.objects.all()
+    return render(request, 'bezero_zerrenda.html', {'bezero_list': BezeroZerrenda})
+
+@login_required
+def admin_produktuak_list(request):
+    ProduktuZerrenda = Produktua.objects.all()
+    return render(request, 'produktu_zerrenda.html', {'produktu_list': ProduktuZerrenda})
+
 
 def login_view(request):
     if request.method == 'POST':

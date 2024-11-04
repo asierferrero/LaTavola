@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %} 
+
+<div class="container mt-4">
+    <h1 class="text-center text-primary">Produktu Lista</h1>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Izena</th>
+                <th>Stock</th>
+                <th>Prezioa</th>
+                <th>Deskripzioa</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produktuak in produktu_list %}
+            <tr>
+                <td>{{ produktuak.izena }}</td>
+                <td>{{ produktuak.stock }}</td>
+                <td>{{ produktuak.prezioa }}</td>
+                <td>{{ produktuak.deskripzioa }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-center mt-4">
+    <button class="btn btn-primary">Produa gehitu</button>
+    <a href="{% url 'admin_home' %}"><button class="btn btn-primary">Atzera</button></a>
+    </div>
+</div>
+
+
+{% endblock %}

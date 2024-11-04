@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %} 
+
+<div class="container mt-4">
+    <h1 class="text-center text-primary">Bezero Lista</h1>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>Emaila</th>
+                <th>Sarrera data</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bezeroak in bezero_list %}
+            <tr>
+                <td>{{ bezeroak.id }}</td>
+                <td>{{ bezeroak.username }}</td>
+                <td>{{ bezeroak.date_joined }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-center mt-4">
+    <a href="{% url 'admin_home' %}"><button class="btn btn-primary">Atzera</button></a>
+    </div>
+</div>
+
+
+{% endblock %}
