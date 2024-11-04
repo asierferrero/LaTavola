@@ -4,9 +4,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .forms import RegisterForm, LoginForm, ProfileForm
 from django.contrib.auth.decorators import login_required
-from django.utils.encoding import force_bytes
 
 User = get_user_model()
+
 
 def main(request):
     return render(request, 'home.html', {})
@@ -45,6 +45,8 @@ def register_view(request):
             send_verification_email(user)
 
             return render(request, 'register.html', {'form': form, 'success': 'Zure kontua egiaztatzeko mezu elektroniko bat bidali da helbide elektronikora'})
+        else:
+            return render(request, 'register.html', {'form': form, 'error': 'Ezin izan da zure kontua egiaztatzeko mezu elektroniko bat bidali'})
     else:
         form = RegisterForm()
 
@@ -52,25 +54,26 @@ def register_view(request):
 
 
 def send_verification_email(user):
-    verification_url = f"{settings.SITE_URL}/verify/{user.id}/{user.username}/"
-    subject = "Zure kontua egiaztatu"
-    message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {verification_url}"
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.username])
+    try:
+        verification_url = f"{settings.SITE_URL}/verify/{user.id}/"
+        subject = "Zure kontua egiaztatu"
+        message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {verification_url}"
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [user.username])
+    except Exception as e:
+        print(f"Errorea emaila bidaltzerakoan: {e}")
 
 
-def verify_view(request, id, username):
-    user = User.objects.get(id=id)
-    
-    if user.username == username:
+def verify_view(request, id):
+    try:
+        user = User.objects.get(id=id)
         user.is_active = True
         user.save()
         
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         
         return render(request, 'verify.html', {'success': 'Zure kontua egiaztatu da'})
-    else:
+    except Exception as e:
         return render(request, 'verify.html', {'error': 'Zure kontua ezin izan da egiaztatu'})
-    
 
 @login_required
 def profile_view(request):
@@ -79,12 +82,12 @@ def profile_view(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=user_profile)
         if form.is_valid():
-            form.save() 
-            return redirect('profile')  
+            form.save()
+            return redirect('profile')
         else:
-            print(form.errors) 
+            print(form.errors)
     else:
-        form = ProfileForm(instance=user_profile) 
+        form = ProfileForm(instance=user_profile)
 
     return render(request, 'profile.html', {'user_profile': user_profile, 'form': form})
 
