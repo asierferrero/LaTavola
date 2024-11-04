@@ -112,7 +112,14 @@ def logout_view(request):
     return redirect('home')
 
 def saskia(request):
-    return render(request, 'saskia.html', {})
+    items = list(Produktua.objects.all().values('img', 'izena', 'deskripzioa', 'prezioa'))
+
+    if request.method == 'GET':
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse(items, safe=False)
+        else:
+            context = {'menu_items': items}
+            return render(request, 'saskia.html', context)
 
 class Produktuak_APIView(APIView):
     def get(self, request, format=None, *args, **kwargs):
