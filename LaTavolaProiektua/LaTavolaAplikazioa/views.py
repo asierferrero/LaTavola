@@ -92,3 +92,6 @@ def profile_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+def saskia(request):
+    return render(request, 'saskia.html', {})

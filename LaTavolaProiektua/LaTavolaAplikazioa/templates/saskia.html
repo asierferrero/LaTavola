@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Columna del carrito -->
+        <div class="col-md-8">
+            <h1 class="mb-4">Saskia</h1>
+            <div class="cart-items">
+                <p>1x Carbonara Pasta <span class="price">15.99€</span></p>
+                <p>2x Margarita Pizza <span class="price">32.60€</span></p>
+            </div>
+            <hr>
+            <div class="total">
+                <h4>Guztira</h4>
+                <p class="total-price">48.59€</p>
+            </div>
+            <button class="btn btn-danger btn-lg mt-3">EROSI</button>
+        </div>
+
+        <!-- Columna de platos recomendados -->
+        <div class="col-md-4">
+            <h2>Gomendatutako Platerrak</h2>
+            <div class="recommended-item mb-3 d-flex flex-md-row flex-column align-items-center">
+                <div class="recommended-img-container mb-2 mb-md-0">
+                    <img src="{% static 'img/pasta.png' %}" class="img-fluid recommended-img" alt="Carbonara Pasta">
+                </div>
+                <div class="recommended-text">
+                    <h4>Carbonara Pasta</h4>
+                    <p>Pasta goxoan arrautza, gazta eta hungihar saltsa krematsuarekin.</p>
+                    <button class="btn btn-danger">Eskatu</button>
+                </div>
+            </div>
+            <div class="recommended-item d-flex flex-md-row flex-column align-items-center">
+                <div class="recommended-img-container mb-2 mb-md-0">
+                    <img src="{% static 'img/pizza.png' %}" class="img-fluid recommended-img" alt="Margarita Pizza">
+                </div>
+                <div class="recommended-text">
+                    <h4>Margarita Pizza</h4>
+                    <p>Italiar pizza klasikoa tomate, mozzarella eta albahakarekin.</p>
+                    <button class="btn btn-danger">Eskatu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .cart-items p, .total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.2rem;
+    }
+    .price, .total-price {
+        font-weight: bold;
+    }
+    .recommended-item {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    .recommended-img-container {
+        width: 100%;
+        max-width: 100px; /* Controla el ancho máximo de la imagen */
+    }
+    .recommended-img {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+    .recommended-text {
+        text-align: center;
+    }
+    .btn-danger {
+        background-color: #d9534f;
+        border: none;
+    }
+</style>
+{% endblock %}
