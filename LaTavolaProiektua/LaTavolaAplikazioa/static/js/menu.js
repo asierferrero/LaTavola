@@ -8,7 +8,7 @@ $(document).ready(function () {
           <div class="col-6 col-md-4">
             <div class="menu-item card">
               <img src="${item.img}" alt="${item.izena}" class="card-img-top rounded" />
-              <div class="card-body">
+              <div class="card-body text-start">
                 <h3 class="card-title">${item.izena}</h3>
                 <p class="card-text">${item.deskripzioa}</p>
                 <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#productModal-${index}">Eskatu</a>
@@ -19,14 +19,12 @@ $(document).ready(function () {
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">${item.izena}</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+                  <h2 class="modal-title">${item.izena}</h2>
+                  <button type="button" class="btn-danger" data-bs-dismiss="modal">X</button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body text-start">
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                       <img src="${item.img}" class="img-fluid rounded" alt="${item.izena}" />
                     </div>
                     <div class="col-md-7">
@@ -38,10 +36,10 @@ $(document).ready(function () {
                         <img src="${staticUrl}img/soja.png" style="width: 40px; height: 40px; margin-right: 10px" />
                       </div>
                       <h3 class="my-4">${item.prezioa}€</h3>
-                      <div class="d-flex align-items-center">
-                        <button class="btn btn-outline-dark btn-sm d-flex align-items-center">-</button>
-                        <span class="mx-3 align-middle d-inline-flex align-items-center" style="height: 30px">1</span>
-                        <button class="btn btn-outline-dark btn-sm d-flex align-items-center">+</button>
+                      <div class="d-flex">
+                        <button class="btn btn-outline-dark btn-sm d-flex">-</button>
+                        <span class="mx-3 align-middle d-inline-flex" style="height: 30px">1</span>
+                        <button class="btn btn-outline-dark btn-sm d-flex">+</button>
                         <img src="${staticUrl}img/cart_negro.png" style="margin-left: 20px; width: 35px; transition: opacity 0.3s ease;" onmouseout="this.src='${staticUrl}img/cart_negro.png'" onmouseover="this.src='${staticUrl}img/cart_rojo.png'" alt="Add to Cart" />
                       </div>
                     </div>
