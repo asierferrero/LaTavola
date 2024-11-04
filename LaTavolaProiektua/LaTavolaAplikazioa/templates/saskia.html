@@ -3,22 +3,19 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <!-- Columna del carrito -->
         <div class="col-md-8">
             <h1 class="mb-4">Saskia</h1>
-            <div class="cart-items">
-                <p>1x Carbonara Pasta <span class="price">15.99€</span></p>
-                <p>2x Margarita Pizza <span class="price">32.60€</span></p>
+            <div id="cartItems" class="cart-items">
+                <!-- Aquí se mostrarán los productos del carrito -->
             </div>
             <hr>
             <div class="total">
                 <h4>Guztira</h4>
-                <p class="total-price">48.59€</p>
+                <p id="totalPrice" class="total-price">0.00€</p>
             </div>
-            <button class="btn btn-danger btn-lg mt-3">EROSI</button>
+            <button class="btn btn-danger btn-lg mt-3" onclick="comprar()">EROSI</button>
         </div>
 
-        <!-- Columna de platos recomendados -->
         <div class="col-md-4">
             <h2>Gomendatutako Platerrak</h2>
             <div class="recommended-item mb-3 d-flex flex-md-row flex-column align-items-center">
@@ -28,7 +25,7 @@
                 <div class="recommended-text">
                     <h4>Carbonara Pasta</h4>
                     <p>Pasta goxoan arrautza, gazta eta hungihar saltsa krematsuarekin.</p>
-                    <button class="btn btn-danger">Eskatu</button>
+                    <button class="btn btn-danger" onclick="addToCart('Carbonara Pasta', 15.99)">Eskatu</button>
                 </div>
             </div>
             <div class="recommended-item d-flex flex-md-row flex-column align-items-center">
@@ -38,7 +35,7 @@
                 <div class="recommended-text">
                     <h4>Margarita Pizza</h4>
                     <p>Italiar pizza klasikoa tomate, mozzarella eta albahakarekin.</p>
-                    <button class="btn btn-danger">Eskatu</button>
+                    <button class="btn btn-danger" onclick="addToCart('Margarita Pizza', 16.30)">Eskatu</button>
                 </div>
             </div>
         </div>
@@ -82,4 +79,46 @@
         border: none;
     }
 </style>
+
+<script>
+function addToCart(productName, productPrice) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingProductIndex = cart.findIndex(item => item.name === productName);
+
+    if (existingProductIndex > -1) {
+        cart[existingProductIndex].quantity += 1;
+    } else {
+        cart.push({ name: productName, price: productPrice, quantity: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Producto añadido al carrito");
+}
+
+function displayCartItems() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartItemsContainer = document.getElementById("cartItems");
+    const totalPriceElement = document.getElementById("totalPrice");
+
+    cartItemsContainer.innerHTML = "";
+    let total = 0;
+
+    cart.forEach(item => {
+        const itemElement = document.createElement("p");
+        itemElement.innerHTML = `${item.quantity}x ${item.name} <span class="price">${(item.price * item.quantity).toFixed(2)}€</span>`;
+        cartItemsContainer.appendChild(itemElement);
+        total += item.price * item.quantity;
+    });
+
+    totalPriceElement.innerHTML = `${total.toFixed(2)}€`;
+}
+
+function comprar() {
+    alert("Gracias por tu compra!");
+    localStorage.removeItem("cart");
+    displayCartItems();
+}
+
+document.addEventListener("DOMContentLoaded", displayCartItems);
+</script>
 {% endblock %}

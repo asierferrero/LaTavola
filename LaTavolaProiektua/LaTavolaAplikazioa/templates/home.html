@@ -43,6 +43,7 @@
       </div>
     </div>
   </section>
+  
   <div class="modal fade" id="carbonaraModal" tabindex="-1" role="dialog" aria-labelledby="carbonaraModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
@@ -68,7 +69,7 @@
                 <button class="btn btn-outline-dark btn-sm d-flex align-items-center">-</button>
                 <span class="mx-3 align-middle d-inline-flex align-items-center" style="height: 30px">1</span>
                 <button class="btn btn-outline-dark btn-sm d-flex align-items-center">+</button>
-                <img src="{% static 'img/cart_negro.png' %}" style="margin-left: 20px; width: 35px; transition: opacity 0.3s ease;" onmouseout="this.src='{% static 'img/cart_negro.png' %}'" onmouseover="this.src='{% static 'img/cart_rojo.png' %}'" alt="Add to Cart" />
+                <img id="addToCartButton" src="{% static 'img/cart_negro.png' %}" style="margin-left: 20px; width: 35px; transition: opacity 0.3s ease;" onmouseout="this.src='{% static 'img/cart_negro.png' %}'" onmouseover="this.src='{% static 'img/cart_rojo.png' %}'" alt="Add to Cart" />
               </div>
             </div>
           </div>
@@ -76,4 +77,26 @@
       </div>
     </div>
   </div>
+  
+  <script>
+    document.getElementById("addToCartButton").addEventListener("click", function() {
+      const product = {
+        name: "Carbonara Pasta",
+        price: 15.99,
+        quantity: 1
+      };
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existingProductIndex = cart.findIndex(item => item.name === product.name);
+
+      if (existingProductIndex > -1) {
+        cart[existingProductIndex].quantity += 1;
+      } else {
+        cart.push(product);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Produktua saskira gehituta");
+    });
+  </script>
 {% endblock %}
