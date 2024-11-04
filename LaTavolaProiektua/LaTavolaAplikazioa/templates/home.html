@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/menu.js' %}"></script>
+  <script type="text/javascript">
+    var staticUrl = "{% static '' %}"
+  </script>
   <div class="hero-image"></div>
   <section class="hero py-3">
     <div class="container">
@@ -11,7 +17,7 @@
         <div class="col-md-6">
           <h2 class="display-4">Italiar Janaria</h2>
           <p>Gozatu gure plater tradizionalez zure etxeko erosotasunean.</p>
-          <a class="btn btn-danger btn-lg" data-toggle="modal" data-target="#carbonaraModal">Eskatu</a>
+          <a class="btn btn-danger btn-lg">Eskatu</a>
         </div>
       </div>
     </div>
@@ -19,84 +25,9 @@
   <section id="menu" class="menu py-5">
     <div class="container text-center">
       <h2 class="display-4">Menua</h2>
-      <div class="row mt-4">
-        <div class="col-6 col-md-4">
-          <div class="menu-item card">
-            <img src="{% static 'img/pizza.png' %}" alt="Pizza Margarita" class="card-img-top rounded" />
-            <div class="card-body">
-              <h3 class="card-title">Margarita Pizza</h3>
-              <p class="card-text">Italiar pizza klasikoa tomate, mozzarella eta albakarekin.</p>
-              <a class="btn btn-danger">Eskatu</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 col-md-4">
-          <div class="menu-item card">
-            <img src="{% static 'img/pasta.png' %}" alt="Pasta Carbonara" class="card-img-top rounded" />
-            <div class="card-body">
-              <h3 class="card-title">Carbonara Pasta</h3>
-              <p class="card-text">Pasta goxoa arrautza, gazta eta hirugihar saltsa krematsuarekin.</p>
-              <a class="btn btn-danger" data-toggle="modal" data-target="#carbonaraModal">Eskatu</a>
-            </div>
-          </div>
-        </div>
+      <div class="row mt-4" id="menu-items">
+        {% comment %}AJAX{% endcomment %}
       </div>
     </div>
   </section>
-  
-  <div class="modal fade" id="carbonaraModal" tabindex="-1" role="dialog" aria-labelledby="carbonaraModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="carbonaraModalLabel">Carbonara Pasta</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-5">
-              <img src="{% static 'img/pasta.png' %}" class="img-fluid rounded" alt="Carbonara Pasta" />
-            </div>
-            <div class="col-md-7">
-              <p>Pasta plater ospetsu italiarra, krematsua eta zaporetsua. Plater simple baina goxoa, tradizioa eta zaporea plater bakarrean uztartzen dituena.</p>
-              <div class="my-3">
-                <img src="{% static 'img/gluten.png' %}" style="width: 40px; height: 40px; margin-right: 10px" />
-                <img src="{% static 'img/huevos.png' %}" style="width: 40px; height: 40px; margin-right: 10px" />
-                <img src="{% static 'img/lacteos.png' %}" style="width: 40px; height: 40px; margin-right: 10px" />
-                <img src="{% static 'img/soja.png' %}" style="width: 40px; height: 40px; margin-right: 10px" />
-              </div>
-              <h3 class="my-4">15.99€</h3>
-              <div class="d-flex align-items-center">
-                <button class="btn btn-outline-dark btn-sm d-flex align-items-center">-</button>
-                <span class="mx-3 align-middle d-inline-flex align-items-center" style="height: 30px">1</span>
-                <button class="btn btn-outline-dark btn-sm d-flex align-items-center">+</button>
-                <img id="addToCartButton" src="{% static 'img/cart_negro.png' %}" style="margin-left: 20px; width: 35px; transition: opacity 0.3s ease;" onmouseout="this.src='{% static 'img/cart_negro.png' %}'" onmouseover="this.src='{% static 'img/cart_rojo.png' %}'" alt="Add to Cart" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <script>
-    document.getElementById("addToCartButton").addEventListener("click", function() {
-      const product = {
-        name: "Carbonara Pasta",
-        price: 15.99,
-        quantity: 1
-      };
-
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const existingProductIndex = cart.findIndex(item => item.name === product.name);
-
-      if (existingProductIndex > -1) {
-        cart[existingProductIndex].quantity += 1;
-      } else {
-        cart.push(product);
-      }
-
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert("Produktua saskira gehituta");
-    });
-  </script>
 {% endblock %}

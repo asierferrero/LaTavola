@@ -3,13 +3,22 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import RegisterForm, LoginForm, ProfileForm
+from .models import Produktua
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 User = get_user_model()
 
 
 def main(request):
-    return render(request, 'home.html', {})
+    if request.method == 'GET':
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            items = Produktua.objects.all().values('img', 'izena', 'deskripzioa', 'prezioa')
+            return JsonResponse(list(items), safe=False)
+        else:
+            items = Produktua.objects.all().values('img', 'izena', 'deskripzioa', 'prezioa')
+            context = {'menu_items': list(items)}
+            return render(request, 'home.html', context)
 
 
 def login_view(request):
