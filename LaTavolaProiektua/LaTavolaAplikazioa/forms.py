@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-
+from .models import Produktua
 User = get_user_model()
 
 
@@ -106,3 +106,8 @@ class ProfileForm(forms.ModelForm):
                 'required': True
             }),
         }
+
+class ProduktuaForm(forms.ModelForm):
+     class Meta:
+        model = Produktua
+        fields = ['izena', 'stock', 'prezioa', 'deskripzioa']

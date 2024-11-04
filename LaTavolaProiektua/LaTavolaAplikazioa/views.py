@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import RegisterForm, LoginForm, ProfileForm
+from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm
 from .models import Produktua
 from django.contrib.auth.decorators import login_required
 from django.utils.encoding import force_bytes
@@ -15,16 +15,25 @@ def main(request):
 
 @login_required
 def admin_home_view(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
     user_profile = User.objects.get(id=request.user.id)
     return render(request, 'admin_home.html', {'user_profile': user_profile})
 
 @login_required
 def admin_bezeroak_list(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
     BezeroZerrenda = User.objects.all()
     return render(request, 'bezero_zerrenda.html', {'bezero_list': BezeroZerrenda})
 
 @login_required
 def admin_produktuak_list(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
     ProduktuZerrenda = Produktua.objects.all()
     return render(request, 'produktu_zerrenda.html', {'produktu_list': ProduktuZerrenda})
 
@@ -112,3 +121,18 @@ def profile_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+@login_required
+def produktua_new(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form=ProduktuaForm(request.POST)
+        if form.is_valid:
+            nota = form.save()
+            nota.save()
+        return redirect('produktuak-list')
+    else:
+        form=ProduktuaForm()
+        return render(request, 'produktua_new.html', {'form':form})
