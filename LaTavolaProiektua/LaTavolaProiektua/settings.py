@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SITE_ID = 7
+SITE_ID = 4
 
 # HAU ALDATU LOKALEAN EZ BADA ERABILTZEN !!!!!!!!!!!
 SITE_URL = 'http://localhost:8000'
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'rest_framework',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'LaTavolaAplikazioa'
