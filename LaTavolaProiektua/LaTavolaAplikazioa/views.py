@@ -1,3 +1,4 @@
+import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
@@ -18,13 +19,20 @@ User = get_user_model()
 
 def main(request):
     if request.method == 'GET':
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            items = Produktua.objects.all().values('img', 'izena', 'deskripzioa', 'prezioa')
-            return JsonResponse(list(items), safe=False)
+        # REST API-ra GET eskaera egin
+        # URL hau aldatu beharko da
+        response = requests.get('http://127.0.0.1:8000/api/produktuak/')
+
+        if response.status_code == 200:
+            items = response.json()  # Erantzuna JSON formatura bihurtu
+
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse(items, safe=False)
+            else:
+                context = {'menu_items': items}
+                return render(request, 'home.html', context)
         else:
-            items = Produktua.objects.all().values('img', 'izena', 'deskripzioa', 'prezioa')
-            context = {'menu_items': list(items)}
-            return render(request, 'home.html', context)
+            return JsonResponse({'error': 'APItik datuak lortzean errorea gertatu da'}, status=500)
 
 
 def login_view(request):
@@ -72,7 +80,8 @@ def send_verification_email(user):
     try:
         verification_url = f"{settings.SITE_URL}/verify/{user.id}/"
         subject = "Zure kontua egiaztatu"
-        message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {verification_url}"
+        message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {
+            verification_url}"
         send_mail(subject, message, settings.EMAIL_HOST_USER, [user.username])
     except Exception as e:
         print(f"Errorea emaila bidaltzerakoan: {e}")
@@ -83,12 +92,13 @@ def verify_view(request, id):
         user = User.objects.get(id=id)
         user.is_active = True
         user.save()
-        
+
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        
+
         return render(request, 'verify.html', {'success': 'Zure kontua egiaztatu da'})
     except Exception as e:
         return render(request, 'verify.html', {'error': 'Zure kontua ezin izan da egiaztatu'})
+
 
 @login_required
 def profile_view(request):
@@ -111,39 +121,51 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
-def saskia(request):
-    items = list(Produktua.objects.all().values('img', 'izena', 'deskripzioa', 'prezioa'))
 
-    if request.method == 'GET':
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse(items, safe=False)
-        else:
-            context = {'menu_items': items}
-            return render(request, 'saskia.html', context)
+def saskia(request):
+    # REST API-ra GET eskaera egin
+    # URL hau aldatu beharko da
+    response = requests.get('http://127.0.0.1:8000/api/produktuak/')
+
+    if response.status_code == 200:
+        items = response.json()  # Erantzuna JSON formatura bihurtu
+
+        if request.method == 'GET':
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse(items, safe=False)
+            else:
+                context = {'menu_items': items}
+                return render(request, 'saskia.html', context)
+    else:
+        return JsonResponse({'error': 'APItik datuak lortzean errorea gertatu da'}, status=500)
+
 
 class Produktuak_APIView(APIView):
     def get(self, request, format=None, *args, **kwargs):
         produktuak = Produktua.objects.all()
         serializer = IkasleSerializers(produktuak, many=True)
         return Response(serializer.data)
-    
+
     def post(self, request, format=None):
         serializer = IkasleSerializers(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class Produktuak_APIView_Detail(APIView):
     def get_object(self, pk):
         try:
             return Produktua.objects.get(pk=pk)
         except Produktua.DoesNotExist:
             raise Http404
+
     def get(self, request, pk, format=None):
         ikasle = self.get_object(pk)
         serializer = IkasleSerializers(ikasle)
         return Response(serializer.data)
-    
+
     def put(self, request, pk, format=None):
         ikasle = self.get_object(pk)
         serializer = IkasleSerializers(ikasle, data=request.data)
@@ -151,7 +173,7 @@ class Produktuak_APIView_Detail(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors,
-status=status.HTTP_400_BAD_REQUEST)
+                        status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         ikasle = self.get_object(pk)
