@@ -38,10 +38,10 @@ $(document).ready(function () {
                       </div>
                       <h3 class="my-4">${item.prezioa}€</h3>
                       <div class="d-flex">
-                        <button class="btn btn-outline-dark btn-sm d-flex">-</button>
-                        <span class="mx-3 align-middle d-inline-flex" style="height: 30px">1</span>
-                        <button class="btn btn-outline-dark btn-sm d-flex">+</button>
-                        <img src="${staticUrl}img/cart_negro.png" style="margin-left: 20px; width: 35px; transition: opacity 0.3s ease;" onmouseout="this.src='${staticUrl}img/cart_negro.png'" onmouseover="this.src='${staticUrl}img/cart_rojo.png'" alt="Add to Cart" />
+                        <button class="btn btn-outline-dark btn-sm d-flex decrement" data-index="${index}">-</button>
+                        <span class="mx-3 align-middle d-inline-flex quantity" data-index="${index}" style="height: 30px">1</span>
+                        <button class="btn btn-outline-dark btn-sm d-flex increment" data-index="${index}">+</button>
+                        <img src="${staticUrl}img/cart_negro.png" style="margin-left: 20px; width: 35px; transition: opacity 0.3s ease;" onmouseout="this.src='${staticUrl}img/cart_negro.png'" onmouseover="this.src='${staticUrl}img/cart_rojo.png'" alt="Add to Cart" class="add-to-cart" data-name="${item.izena}" data-price="${item.prezioa}" data-index="${index}" />
                       </div>
                     </div>
                   </div>
@@ -51,9 +51,47 @@ $(document).ready(function () {
           </div>
         `);
       });
+
+      $(".increment").click(function () {
+        const index = $(this).data("index");
+        let quantityElement = $(`.quantity[data-index="${index}"]`);
+        let quantity = parseInt(quantityElement.text());
+        quantityElement.text(quantity + 1);
+      });
+
+      $(".decrement").click(function () {
+        const index = $(this).data("index");
+        let quantityElement = $(`.quantity[data-index="${index}"]`);
+        let quantity = parseInt(quantityElement.text());
+        if (quantity > 1) {
+          quantityElement.text(quantity - 1);
+        }
+      });
+
+      $(".add-to-cart").click(function () {
+        const name = $(this).data("name");
+        const price = parseFloat($(this).data("price"));
+        const index = $(this).data("index");
+        const quantity = parseInt($(`.quantity[data-index="${index}"]`).text());
+        addToCart(name, price, quantity);
+      });
     },
     error: function (xhr, status, error) {
       console.error("Error fetching menu items:", error);
     },
   });
+
+  function addToCart(productName, productPrice, quantity) {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingProductIndex = cart.findIndex((item) => item.name === productName);
+
+    if (existingProductIndex > -1) {
+      cart[existingProductIndex].quantity += quantity;
+    } else {
+      cart.push({ name: productName, price: productPrice, quantity: quantity });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert('Producto añadido al carrito');
+  }
 });
