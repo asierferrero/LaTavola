@@ -1,109 +1,184 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{% static 'js/gomendioak.js' %}"></script>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-8">
-        <h1 class="mb-4">Saskia</h1>
-        <div id="cartItems" class="cart-items">
-          <!-- Saskiko produktuak erakutsi -->
-        </div>
-        <hr />
-        <div class="total">
-          <h4>Guztira</h4>
-          <p id="totalPrice" class="total-price">0.00€</p>
-        </div>
-        <button class="btn btn-danger btn-lg mt-3" onclick="comprar()">EROSI</button>
+{% extends 'base.html' %} {% load static %} {% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/gomendioak.js' %}"></script>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1 class="mb-4 text-center">Saskia</h1>
+      <div id="cartItems" class="cart-items">
+        <!-- Saskiko produktuak erakutsi -->
       </div>
-
-      <div class="col-md-4" id="gomendioak">
-        <h2>Gomendatutako Platerrak</h2>
-        <!-- AJAX -->
+      <hr />
+      <div class="total text-center mt-4">
+        <h4>Guztira</h4>
+        <p id="totalPrice" class="total-price">0.00€</p>
+      </div>
+      <div class="text-center">
+        <button class="btn btn-danger btn-lg mt-3" onclick="comprar()">
+          EROSI
+        </button>
       </div>
     </div>
+
+    <div class="col-md-4" id="gomendioak">
+      <h2 class="text-center">Gomendatutako Platerrak</h2>
+      <!-- AJAX -->
+    </div>
   </div>
+</div>
 
-  <style>
-    .container {
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-    .cart-items p,
-    .total {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.2rem;
-    }
-    .price,
-    .total-price {
-      font-weight: bold;
-    }
-    .recommended-item {
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 15px;
-      width: 100%;
-    }
-    .recommended-img-container {
-      width: 100%;
-      max-width: 100px;
-    }
-    .recommended-img {
-      width: 100%;
-      height: auto;
-      border-radius: 5px;
-    }
-    .recommended-text {
-      text-align: center;
-    }
-    .btn-danger {
-      border: none;
-    }
-  </style>
+<style>
+  .container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  h1,
+  h2 {
+    color: #333;
+    font-weight: 600;
+  }
+  .cart-items p,
+  .total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+  }
+  .price,
+  .total-price {
+    font-weight: bold;
+  }
+  .total-price {
+    color: #dc3545;
+    font-size: 1.4rem;
+  }
+  .recommended-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  .recommended-img-container {
+    max-width: 100px;
+    margin: 0 auto 10px;
+  }
+  .recommended-img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  .recommended-text {
+    text-align: center;
+  }
+  .btn-small {
+    padding: 0.2rem 0.6rem;
+    margin: 0 5px;
+    font-size: 0.9rem;
+  }
+  .cart-item-buttons {
+    display: flex;
+    justify-content: end;
+    gap: 0.3rem;
+    flex-grow: 1;
+  }
+  .price {
+    font-weight: bold;
+    width: 60px; /* Ajusta el ancho según sea necesario */
+    text-align: right;
+  }
+</style>
 
-  <script>
-    function addToCart(productName, productPrice) {
-      const cart = JSON.parse(localStorage.getItem('cart')) || []
-      const existingProductIndex = cart.findIndex((item) => item.name === productName)
-    
-      if (existingProductIndex > -1) {
-        cart[existingProductIndex].quantity += 1
+<script>
+  function addToCart(productName, productPrice) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingProductIndex = cart.findIndex(
+      (item) => item.name === productName
+    );
+
+    if (existingProductIndex > -1) {
+      cart[existingProductIndex].quantity += 1;
+    } else {
+      cart.push({ name: productName, price: productPrice, quantity: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    displayCartItems();
+  }
+
+  function removeFromCart(productName) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart = cart.filter((item) => item.name !== productName);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    displayCartItems();
+  }
+
+  function updateQuantity(productName, change) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const product = cart.find((item) => item.name === productName);
+
+    if (product) {
+      product.quantity += change;
+      if (product.quantity <= 0) {
+        removeFromCart(productName);
       } else {
-        cart.push({ name: productName, price: productPrice, quantity: 1 })
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCartItems();
       }
-    
-      localStorage.setItem('cart', JSON.stringify(cart))
-      alert('Producto añadido al carrito')
     }
-    
-    function displayCartItems() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || []
-      const cartItemsContainer = document.getElementById('cartItems')
-      const totalPriceElement = document.getElementById('totalPrice')
-    
-      cartItemsContainer.innerHTML = ''
-      let total = 0
-    
-      cart.forEach((item) => {
-        const itemElement = document.createElement('p')
-        itemElement.innerHTML = `${item.quantity}x ${item.name} <span class="price">${(item.price * item.quantity).toFixed(2)}€</span>`
-        cartItemsContainer.appendChild(itemElement)
-        total += item.price * item.quantity
-      })
-    
-      totalPriceElement.innerHTML = `${total.toFixed(2)}€`
-    }
-    
-    function comprar() {
-      alert('Gracias por tu compra!')
-      localStorage.removeItem('cart')
-      displayCartItems()
-    }
-    
-    document.addEventListener('DOMContentLoaded', displayCartItems)
-  </script>
+  }
+
+  function displayCartItems() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartItemsContainer = document.getElementById("cartItems");
+    const totalPriceElement = document.getElementById("totalPrice");
+
+    cartItemsContainer.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item) => {
+      const itemElement = document.createElement("div");
+      itemElement.classList.add(
+        "cart-item",
+        "d-flex",
+        "align-items-center",
+        "justify-content-between",
+        "p-2",
+        "border",
+        "mb-2",
+        "rounded"
+      );
+      itemElement.innerHTML = `
+          <span>${item.name}</span>
+         <!-- En el HTML del item en el carrito -->
+          <div class="cart-item-buttons">
+            <button class="btn btn-danger btn-small" onclick="removeFromCart('${
+              item.name
+            }')">🗑️</button>
+            <button class="btn btn-secondary btn-small" onclick="updateQuantity('${
+              item.name
+            }', -1)">-</button>
+            <span>${item.quantity}x</span>
+            <button class="btn btn-secondary btn-small" onclick="updateQuantity('${
+              item.name
+            }', 1)">+</button>
+          </div>
+          <span class="price">${(item.price * item.quantity).toFixed(2)}€</span>
+          </div>
+        `;
+      cartItemsContainer.appendChild(itemElement);
+      total += item.price * item.quantity;
+    });
+
+    totalPriceElement.innerHTML = `${total.toFixed(2)}€`;
+  }
+
+  function comprar() {
+    alert("Gracias por tu compra!");
+    localStorage.removeItem("cart");
+    displayCartItems();
+  }
+
+  document.addEventListener("DOMContentLoaded", displayCartItems);
+</script>
 {% endblock %}
