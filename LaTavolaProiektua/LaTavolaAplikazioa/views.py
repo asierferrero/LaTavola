@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import IkasleSerializers
+from .serializers import ProduktuakSerializers
 from rest_framework import status
 from django.http import Http404
 
@@ -142,12 +142,12 @@ def saskia(request):
 
 class Produktuak_APIView(APIView):
     def get(self, request, format=None, *args, **kwargs):
-        produktuak = Produktua.objects.all()
-        serializer = IkasleSerializers(produktuak, many=True)
+        produktuak = Produktua.objects.prefetch_related('alergenoak').all()  # Produktuak bakoitzaren alergenoekin erlazionatu
+        serializer = ProduktuakSerializers(produktuak, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = IkasleSerializers(data=request.data)
+        serializer = ProduktuakSerializers(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -162,20 +162,19 @@ class Produktuak_APIView_Detail(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
-        ikasle = self.get_object(pk)
-        serializer = IkasleSerializers(ikasle)
+        produktua = self.get_object(pk)
+        serializer = ProduktuakSerializers(produktua)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        ikasle = self.get_object(pk)
-        serializer = IkasleSerializers(ikasle, data=request.data)
+        produktua = self.get_object(pk)
+        serializer = ProduktuakSerializers(produktua, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors,
-                        status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        ikasle = self.get_object(pk)
-        ikasle.delete()
+        produktua = self.get_object(pk)
+        produktua.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -4,6 +4,10 @@ $(document).ready(function () {
     method: "GET",
     success: function (data) {
       data.forEach(function (item, index) {
+        let alergenoak = item.alergenoak.map(alergeno => `
+          <img src="${alergeno.img}" style="width: 40px; height: 40px; margin-right: 10px" alt="${alergeno.izena}" />
+        `).join('');
+
         $("#menu-items").append(`
           <div class="col-6 col-md-4">
             <div class="menu-item card">
@@ -30,10 +34,7 @@ $(document).ready(function () {
                     <div class="col-md-7">
                       <p>${item.deskripzioa}</p>
                       <div class="my-3">
-                        <img src="${staticUrl}img/gluten.png" style="width: 40px; height: 40px; margin-right: 10px" />
-                        <img src="${staticUrl}img/huevos.png" style="width: 40px; height: 40px; margin-right: 10px" />
-                        <img src="${staticUrl}img/lacteos.png" style="width: 40px; height: 40px; margin-right: 10px" />
-                        <img src="${staticUrl}img/soja.png" style="width: 40px; height: 40px; margin-right: 10px" />
+                        ${alergenoak}
                       </div>
                       <h3 class="my-4">${item.prezioa}€</h3>
                       <div class="d-flex">
