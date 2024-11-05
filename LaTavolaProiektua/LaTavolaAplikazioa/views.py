@@ -180,3 +180,31 @@ def produktuak_edit(request, id):
         form = ProduktuaForm(instance=produktuak)
     
     return render(request, 'produktua_new.html', {'form': form, 'produktuak': produktuak})
+
+@login_required
+def bezeroak_delete(request, id):
+    
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    bezeroak = get_object_or_404(User, id=id)
+    
+    if request.method == "POST":
+        bezeroak.delete()
+        return redirect('bezeroak-list')
+    
+
+@login_required
+def bezero_edit(request, id):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    user = get_object_or_404(User, id=id)
+
+    if request.method == "POST":
+        is_staff = request.POST.get('is_staff') == 'on'
+        user.is_staff = is_staff 
+        user.save()
+        return redirect('bezeroak-list')
+
+    return render(request, 'bezero_edit.html', {'user': user})

@@ -11,6 +11,9 @@
         <button type="submit" class="btn btn-primary">Bilatu</button>
         <a href="{% url 'bezeroak-list' %}" class="btn btn-secondary ml-2">Berrabiarazi</a>
     </form>
+    <div class="text-center mt-4 mb-4">
+    <a href="{% url 'admin_home' %}"><button class="btn btn-danger">Atzera</button></a>
+    </div>
     <table class="table table-striped table-bordered">
         <thead class="thead-light">
             <tr>
@@ -25,13 +28,15 @@
                 <td>{{ bezeroak.id }}</td>
                 <td>{{ bezeroak.username }}</td>
                 <td>{{ bezeroak.date_joined }}</td>
+                <td><form method="POST" action="{% url 'bezeroak-delete' bezeroak.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="bi bi-trash btn btn-danger" onclick="return confirm('Benetako borratu nahi duzula?');"></button>
+                </form></td>
+                <td><a href="{% url 'bezero-edit' bezeroak.id %}" class="bi bi-pencil-square btn btn-info"></a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <div class="text-center mt-4">
-    <a href="{% url 'admin_home' %}"><button class="btn btn-danger">Atzera</button></a>
-    </div>
 </div>
 
 

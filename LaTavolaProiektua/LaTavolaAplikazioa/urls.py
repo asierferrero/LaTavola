@@ -10,6 +10,8 @@ urlpatterns = [
     path('admin-home/produktuak-new/', views.produktua_new , name='produktuak-new'),
     path('produktuak/delete/<int:id>/', views.produktuak_delete, name='produktuak-delete'),
     path('produktuak/edit/<int:id>/', views.produktuak_edit, name='produktuak-edit'),
+    path('bezeroak/delete/<int:id>/', views.bezeroak_delete, name='bezeroak-delete'),
+    path('bezeroak/edit/<int:id>/', views.bezero_edit, name='bezero-edit'),
     
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
