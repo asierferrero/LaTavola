@@ -18,21 +18,7 @@ User = get_user_model()
 
 
 def main(request):
-    if request.method == 'GET':
-        # REST API-ra GET eskaera egin
-        # URL hau aldatu beharko da
-        response = requests.get('http://127.0.0.1:8000/api/produktuak/')
-
-        if response.status_code == 200:
-            items = response.json()  # Erantzuna JSON formatura bihurtu
-
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse(items, safe=False)
-            else:
-                context = {'menu_items': items}
-                return render(request, 'home.html', context)
-        else:
-            return JsonResponse({'error': 'APItik datuak lortzean errorea gertatu da'}, status=500)
+    return render(request, 'home.html', {})
 
 
 def login_view(request):
@@ -123,21 +109,7 @@ def logout_view(request):
 
 
 def saskia(request):
-    # REST API-ra GET eskaera egin
-    # URL hau aldatu beharko da
-    response = requests.get('http://127.0.0.1:8000/api/produktuak/')
-
-    if response.status_code == 200:
-        items = response.json()  # Erantzuna JSON formatura bihurtu
-
-        if request.method == 'GET':
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse(items, safe=False)
-            else:
-                context = {'menu_items': items}
-                return render(request, 'saskia.html', context)
-    else:
-        return JsonResponse({'error': 'APItik datuak lortzean errorea gertatu da'}, status=500)
+    return render(request, 'saskia.html', {})
 
 
 class Produktuak_APIView(APIView):

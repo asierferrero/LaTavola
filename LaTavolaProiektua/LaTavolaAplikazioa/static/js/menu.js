@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $.ajax({
-    url: "/",
+    url: "/api/produktuak",
     method: "GET",
     success: function (data) {
       data.forEach(function (item, index) {
