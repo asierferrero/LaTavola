@@ -1,4 +1,3 @@
-import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
@@ -6,10 +5,8 @@ from django.conf import settings
 from .forms import RegisterForm, LoginForm, ProfileForm
 from .models import Produktua
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from .serializers import ProduktuakSerializers
 from rest_framework import status
 from django.http import Http404
