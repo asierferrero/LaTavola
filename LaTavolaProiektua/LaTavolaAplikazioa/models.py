@@ -28,6 +28,7 @@ class Langilea(models.Model):
 class Alergeno(models.Model):
     id = models.AutoField(primary_key=True)
     izena = models.CharField(max_length=100)
+    img = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.izena
