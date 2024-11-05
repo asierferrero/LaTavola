@@ -27,8 +27,14 @@ def admin_bezeroak_list(request):
     if not request.user.is_staff:
         return redirect('home')
     
-    BezeroZerrenda = User.objects.all()
-    return render(request, 'bezero_zerrenda.html', {'bezero_list': BezeroZerrenda})
+    query = request.GET.get('q')
+    if query:
+        bezero_list = User.objects.filter(
+            Q(username__icontains=query)
+        )
+    else:
+        bezero_list = User.objects.all()
+    return render(request, 'bezero_zerrenda.html', {'bezero_list': bezero_list})
 
 @login_required
 def admin_produktuak_list(request):

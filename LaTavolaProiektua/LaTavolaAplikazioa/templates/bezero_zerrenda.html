@@ -5,6 +5,12 @@
 
 <div class="container mt-4">
     <h1 class="text-center text-primary">Bezero Lista</h1>
+
+    <form method="GET" action="" class="form-inline mb-4">
+        <input type="text" name="q" placeholder="Sartu bezeroaren Emaila" class="form-control mr-2" value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary">Bilatu</button>
+        <a href="{% url 'bezeroak-list' %}" class="btn btn-secondary ml-2">Berrabiarazi</a>
+    </form>
     <table class="table table-striped table-bordered">
         <thead class="thead-light">
             <tr>
