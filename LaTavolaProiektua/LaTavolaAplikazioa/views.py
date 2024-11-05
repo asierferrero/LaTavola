@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
@@ -153,3 +153,13 @@ def produktua_new(request):
     
     return render(request, 'produktua_new.html', {'form': form})
 
+@login_required
+def produktuak_delete(request, id):
+    
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    produktuak = get_object_or_404(Produktua, id=id)
+    if request.method == "POST":
+        produktuak.delete()
+        return redirect('produktuak-list')
