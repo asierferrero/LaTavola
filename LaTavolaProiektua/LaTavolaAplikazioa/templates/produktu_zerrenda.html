@@ -46,7 +46,9 @@
                         <button type="submit" class="bi bi-trash btn btn-danger" onclick="return confirm('Benetako borratu nahi duzula?');"></button>
                     </form>
                 </td>
-                <td><a class="bi bi-pencil-square btn btn-info"></a></td>
+                <td>
+                    <a href="{% url 'produktuak-edit' produktuak.id %}" class="bi bi-pencil-square btn btn-info"></a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

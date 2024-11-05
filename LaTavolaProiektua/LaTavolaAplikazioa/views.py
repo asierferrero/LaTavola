@@ -163,3 +163,20 @@ def produktuak_delete(request, id):
     if request.method == "POST":
         produktuak.delete()
         return redirect('produktuak-list')
+    
+@login_required
+def produktuak_edit(request, id):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    produktuak = get_object_or_404(Produktua, id=id)
+    
+    if request.method == "POST":
+        form = ProduktuaForm(request.POST, request.FILES, instance=produktuak)
+        if form.is_valid():
+            form.save()
+            return redirect('produktuak-list')  # Redirigir a la lista de productos
+    else:
+        form = ProduktuaForm(instance=produktuak)
+    
+    return render(request, 'produktua_new.html', {'form': form, 'produktuak': produktuak})
