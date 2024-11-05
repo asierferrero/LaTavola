@@ -9,7 +9,7 @@ $(document).ready(function () {
         `).join('');
 
         $("#menu-items").append(`
-          <div class="col-6 col-md-4">
+          <div class="col-2 col-md-2">
             <div class="menu-item card">
               <img src="${item.img}" alt="${item.izena}" class="card-img-top rounded" />
               <div class="card-body text-start">
