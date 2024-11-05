@@ -110,4 +110,4 @@ class ProfileForm(forms.ModelForm):
 class ProduktuaForm(forms.ModelForm):
      class Meta:
         model = Produktua
-        fields = ['izena', 'stock', 'prezioa', 'deskripzioa']
+        fields = ['izena', 'deskripzioa', 'alergenoak', 'img', 'prezioa', 'stock']

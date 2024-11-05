@@ -7,6 +7,7 @@ from .models import Produktua
 from django.contrib.auth.decorators import login_required
 from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -34,8 +35,17 @@ def admin_produktuak_list(request):
     if not request.user.is_staff:
         return redirect('home')
     
-    ProduktuZerrenda = Produktua.objects.all()
-    return render(request, 'produktu_zerrenda.html', {'produktu_list': ProduktuZerrenda})
+    query = request.GET.get('q')  # Obtiene el name del input
+    if query:
+        # Filtra el nombre segun el input metido
+        produktu_list = Produktua.objects.filter(
+            Q(izena__icontains=query)
+        )
+    else:
+        # Si no lo encuentra aparece toda la lista
+        produktu_list = Produktua.objects.all()
+    
+    return render(request, 'produktu_zerrenda.html', {'produktu_list': produktu_list})
 
 
 def login_view(request):
@@ -128,11 +138,12 @@ def produktua_new(request):
         return redirect('home')
     
     if request.method == 'POST':
-        form=ProduktuaForm(request.POST)
-        if form.is_valid:
-            nota = form.save()
-            nota.save()
-        return redirect('produktuak-list')
+        form = ProduktuaForm(request.POST, request.FILES) 
+        if form.is_valid():
+            form.save()  
+            return redirect('produktuak-list')
     else:
-        form=ProduktuaForm()
-        return render(request, 'produktua_new.html', {'form':form})
+        form = ProduktuaForm()
+    
+    return render(request, 'produktua_new.html', {'form': form})
+

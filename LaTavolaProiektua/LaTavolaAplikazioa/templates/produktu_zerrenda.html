@@ -5,13 +5,24 @@
 
 <div class="container mt-4">
     <h1 class="text-center text-primary">Produktu Lista</h1>
+    <form method="GET" action="" class="form-inline mb-4">
+        <input type="text" name="q" placeholder="Sartu produktuaren izena" class="form-control mr-2" value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary">Bilatu</button>
+        <a href="{% url 'produktuak-list' %}" class="btn btn-secondary ml-2">Berrabiarazi</a>
+    </form>
+    <div class="text-center mt-4 mb-4">
+        <a href="{% url 'produktuak-new' %}"><button class="btn btn-primary">Produktua gehitu</button></a>
+    <a href="{% url 'admin_home' %}"><button class="btn btn-primary">Atzera</button></a>
+    </div>
     <table class="table table-striped table-bordered">
         <thead class="thead-light">
             <tr>
                 <th>Izena</th>
                 <th>Stock</th>
                 <th>Prezioa</th>
+                <th>Alergenoak</th>
                 <th>Deskripzioa</th>
+                <th>Irudia</th>
             </tr>
         </thead>
         <tbody>
@@ -20,15 +31,19 @@
                 <td>{{ produktuak.izena }}</td>
                 <td>{{ produktuak.stock }}</td>
                 <td>{{ produktuak.prezioa }}</td>
+                <td>{{ produktuak.alergenoak }}</td>
                 <td>{{ produktuak.deskripzioa }}</td>
+                <td>
+                    {% if produktuak.img %}
+                        <img src="{{ produktuak.img.url }}" alt="{{ produktuak.izena }}" style="width: 100px; height: auto;"> 
+                    {% else %}
+                        <span>No image</span>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <div class="text-center mt-4">
-        <a href="{% url 'produktuak-new' %}"><button class="btn btn-primary">Produa gehitu</button></a>
-    <a href="{% url 'admin_home' %}"><button class="btn btn-primary">Atzera</button></a>
-    </div>
 </div>
 
 

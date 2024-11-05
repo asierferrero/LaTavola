@@ -2,7 +2,7 @@
 {% block content %}
 <h1 class="mt-4 mb-4 text-center">Produktu berria gehitu</h1>
 <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <form method="POST" class="post-form">
+    <form method="POST" class="post-form" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             {{ form.as_p }}
