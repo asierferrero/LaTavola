@@ -5,7 +5,7 @@ $(document).ready(function () {
     success: function (data) {
       data.forEach(function (item, index) {
         let alergenoak = item.alergenoak.map(alergeno => `
-          <img src="${alergeno.img}" style="width: 40px; height: 40px; margin-right: 10px" alt="${alergeno.izena}" />
+          <img src="${alergeno.img}" style="width: 40px; height: 40px; margin-right: 10px" title="${alergeno.izena}" />
         `).join('');
 
         $("#menu-items").append(`
