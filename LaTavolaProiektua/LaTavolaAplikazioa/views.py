@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 from .serializers import ProduktuakSerializers
 from rest_framework import status
 from django.http import Http404
+from . import consume
 
 User = get_user_model()
 
@@ -147,3 +148,23 @@ class Produktuak_APIView_Detail(APIView):
         produktua = self.get_object(pk)
         produktua.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class Consume_API(APIView):
+    def get(self, request, format=None, *args, **kwargs):
+        produktuak = Produktua.objects.prefetch_related('alergenoak').all()  # Produktuak bakoitzaren alergenoekin erlazionatu
+        serializer = ProduktuakSerializers(produktuak, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = ProduktuakSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class Consume_APIView_Detail(APIView):
+    def get_object(self, pk):
+        try:
+            return Produktua.objects.get(pk=pk)
+        except Produktua.DoesNotExist:
+            raise Http404
