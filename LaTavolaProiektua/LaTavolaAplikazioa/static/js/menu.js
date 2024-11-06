@@ -92,6 +92,8 @@ $(document).ready(function () {
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
-    alert('Producto añadido al carrito');
+
+    const notification = $("#notification");
+    notification.stop().fadeIn(300).delay(1000).fadeOut(300); 
   }
 });

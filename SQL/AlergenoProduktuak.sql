@@ -64,5 +64,14 @@ INSERT INTO latavolaprueba.latavolaaplikazioa_produktua_alergenoak (produktua_id
 INSERT INTO latavolaprueba.latavolaaplikazioa_produktua_alergenoak (produktua_id, alergeno_id) VALUES (24, 3);
 INSERT INTO latavolaprueba.latavolaaplikazioa_produktua_alergenoak (produktua_id, alergeno_id) VALUES (24, 4);
 
--- Gelato Artigianale (contiene lácteos)
+-- Gelato Artigianale (contiene lácteos y frutos secos, por el pistacho)
 INSERT INTO latavolaprueba.latavolaaplikazioa_produktua_alergenoak (produktua_id, alergeno_id) VALUES (25, 4);
+
+-- Caffè Espresso (puede contener lácteos si se sirve con leche)
+INSERT INTO latavolaprueba.latavolaaplikazioa_produktua_alergenoak (produktua_id, alergeno_id) VALUES (26, 4);
+
+-- Caffè Corretto (puede contener lácteos y frutos secos si se sirve con leche o ciertos licores)
+INSERT INTO latavolaprueba.latavolaaplikazioa_produktua_alergenoak (produktua_id, alergeno_id) VALUES (27, 4);
+
+
+
