@@ -83,7 +83,7 @@ class Iritzia(models.Model):
         return f"{self.erabiltzailea}{self.izarrak}"
 
 #TODO preguntar modelo BBDD del grupo de alberdi y terminar el MODELO
-class T2Produktuak(models.Model):
-    id = models.AutoField(primary_key=True)
-    nombre = models.AutoField(max_length=100)
-    descripcion = models.CharField(max_length=300)
+# class T2Produktuak(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     nombre = models.AutoField(max_length=100)
+#     descripcion = models.CharField(max_length=300)
