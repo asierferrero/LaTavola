@@ -40,7 +40,7 @@ $(document).ready(function () {
                       <div class="d-flex">
                         <button class="btn btn-outline-dark btn-sm d-flex decrement" data-index="${index}">-</button>
                         <span class="mx-3 align-middle d-inline-flex quantity" data-index="${index}" style="height: 30px">1</span>
-                        <button class="btn btn-outline-dark btn-sm d-flex increment" data-index="${index}">+</button>
+                        <button class="btn btn-outline-dark btn-sm d-flex increment" data-index="${index}" data-stock="${item.stock}">+</button>
                         <img src="${staticUrl}img/cart_negro.png" style="margin-left: 20px; width: 35px; transition: opacity 0.3s ease;" onmouseout="this.src='${staticUrl}img/cart_negro.png'" onmouseover="this.src='${staticUrl}img/cart_rojo.png'" alt="Add to Cart" class="add-to-cart" data-name="${item.izena}" data-price="${item.prezioa}" data-index="${index}" />
                       </div>
                     </div>
@@ -54,9 +54,13 @@ $(document).ready(function () {
 
       $(".increment").click(function () {
         const index = $(this).data("index");
+        const stock = parseInt($(this).data("stock"));
         let quantityElement = $(`.quantity[data-index="${index}"]`);
         let quantity = parseInt(quantityElement.text());
-        quantityElement.text(quantity + 1);
+
+        if (quantity < stock) {
+          quantityElement.text(quantity + 1);
+        }
       });
 
       $(".decrement").click(function () {
@@ -74,6 +78,9 @@ $(document).ready(function () {
         const index = $(this).data("index");
         const quantity = parseInt($(`.quantity[data-index="${index}"]`).text());
         addToCart(name, price, quantity);
+
+        // Cerrar el modal después de añadir al carrito
+        $(`#productModal-${index}`).modal('hide');
       });
     },
     error: function (xhr, status, error) {
