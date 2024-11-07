@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'rest_framework.authtoken',
     'LaTavolaAplikazioa'
 ]
 

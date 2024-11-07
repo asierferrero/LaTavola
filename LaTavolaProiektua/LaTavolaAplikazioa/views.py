@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
+import requests
 from .forms import RegisterForm, LoginForm, ProfileForm
 from .models import Produktua
 from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import ProduktuakSerializers
+from .serializers import ProduktuakSerializers,T2ProduktuakSerializer,T2AlergenoSerializer
 from rest_framework import status
 from django.http import Http404
 from . import consume
@@ -113,11 +114,15 @@ def saskia(request):
 
 class Produktuak_APIView(APIView):
     def get(self, request, format=None, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect('home')
         produktuak = Produktua.objects.prefetch_related('alergenoak').all()  # Produktuak bakoitzaren alergenoekin erlazionatu
         serializer = ProduktuakSerializers(produktuak, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        if not request.user.is_staff:
+            return redirect('home')
         serializer = ProduktuakSerializers(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -126,18 +131,24 @@ class Produktuak_APIView(APIView):
 
 
 class Produktuak_APIView_Detail(APIView):
-    def get_object(self, pk):
+    def get_object(self, pk,request):
+        if not request.user.is_staff:
+            return redirect('home')
         try:
             return Produktua.objects.get(pk=pk)
         except Produktua.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
+        if not request.user.is_staff:
+            return redirect('home')
         produktua = self.get_object(pk)
         serializer = ProduktuakSerializers(produktua)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        if not request.user.is_staff:
+            return redirect('home')
         produktua = self.get_object(pk)
         serializer = ProduktuakSerializers(produktua, data=request.data)
         if serializer.is_valid():
@@ -146,6 +157,8 @@ class Produktuak_APIView_Detail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
+        if not request.user.is_staff:
+            return redirect('home')
         produktua = self.get_object(pk)
         produktua.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -154,19 +167,26 @@ class Produktuak_APIView_Detail(APIView):
 #TODO terminar las funciones para consumir el REST API cuando el grupo de Alberdi tenga terminado el API
 class T2Consume_API(APIView):
     def get(self, request, format=None, *args, **kwargs):
-        produktuak = T2Product.objects.prefetch_related('alergenoak').all()  # Produktuak bakoitzaren alergenoekin erlazionatu
-        serializer = ProduktuakSerializers(produktuak, many=True)
+        if not request.user.is_staff:
+            return redirect('home')
+        produktuak = requests.get('http://api.example.com/books?author=edwards&year=2009')
+        serializer = T2ProduktuakSerializer(produktuak, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = ProduktuakSerializers(data=request.data)
+        if not request.user.is_staff:
+            return redirect('home')
+        serializer = T2ProduktuakSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class T2Consume_APIView_Detail(APIView):
-    def get_object(self, pk):
+    def get_object(self, pk,request):
+        if not request.user.is_staff:
+            return redirect('home')
         try:
             return T2Product.objects.get(pk=pk)
         except Produktua.DoesNotExist:
