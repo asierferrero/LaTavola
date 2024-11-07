@@ -169,7 +169,7 @@ class T2Consume_API(APIView):
     def get(self, request, format=None, *args, **kwargs):
         if not request.user.is_staff:
             return redirect('home')
-        produktuak = requests.get('http://api.example.com/books?author=edwards&year=2009')
+        produktuak = requests.get('http://192.168.73.26:8000/v1/product')
         serializer = T2ProduktuakSerializer(produktuak, many=True)
         return Response(serializer.data)
 

@@ -11,5 +11,5 @@ urlpatterns = [
     path('verify/<int:id>/', views.verify_view, name='verify'),
     path('api/produktuak/', views.Produktuak_APIView.as_view()),
     path('api/produktuak/<int:pk>/', views.Produktuak_APIView_Detail.as_view()),
-    path('api/ContsumituT2/', views.T2Consume_API.as_view())
+    path('api/contsumituT2/', views.T2Consume_API.as_view())
 ]
