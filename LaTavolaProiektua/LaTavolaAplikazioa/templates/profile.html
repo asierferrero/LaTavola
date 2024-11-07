@@ -84,21 +84,29 @@
           </div>
         </div>
       </div>
+      
       <div class="text-center mt-4">
         <a href="{% url 'logout' %}" class="logout btn btn-danger">Saioa Itxi</a>
       </div>
+
+      {% if user.is_staff %}
+      <div class="text-center mt-4">
+        <a href="{% url 'admin_home' %}" class="btn btn-primary">Admin Panelera joan</a>
+      </div>
+      {% endif %}
+      
     </div>
   </section>
 
   <script>
     function editProfile() {
-      document.getElementById('edit-form').style.display = 'block'
-      document.getElementById('profile-info').style.display = 'none'
+      document.getElementById('edit-form').style.display = 'block';
+      document.getElementById('profile-info').style.display = 'none';
     }
     
     function cancelEdit() {
-      document.getElementById('edit-form').style.display = 'none'
-      document.getElementById('profile-info').style.display = 'block'
+      document.getElementById('edit-form').style.display = 'none';
+      document.getElementById('profile-info').style.display = 'block';
     }
   </script>
 {% endblock %}
