@@ -10,8 +10,8 @@ from rest_framework.views import APIView
 from .serializers import ProduktuakSerializers
 from rest_framework import status
 from django.http import Http404
-# from . import consume
-# from .models import T2Produktuak
+from . import consume
+from .models import T2Product
 
 User = get_user_model()
 
@@ -152,22 +152,22 @@ class Produktuak_APIView_Detail(APIView):
 
 
 #TODO terminar las funciones para consumir el REST API cuando el grupo de Alberdi tenga terminado el API
-# class Consume_API(APIView):
-#     def get(self, request, format=None, *args, **kwargs):
-#         produktuak = T2Produktuak.objects.prefetch_related('alergenoak').all()  # Produktuak bakoitzaren alergenoekin erlazionatu
-#         serializer = ProduktuakSerializers(produktuak, many=True)
-#         return Response(serializer.data)
+class T2Consume_API(APIView):
+    def get(self, request, format=None, *args, **kwargs):
+        produktuak = T2Product.objects.prefetch_related('alergenoak').all()  # Produktuak bakoitzaren alergenoekin erlazionatu
+        serializer = ProduktuakSerializers(produktuak, many=True)
+        return Response(serializer.data)
 
-#     def post(self, request, format=None):
-#         serializer = ProduktuakSerializers(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-# class Consume_APIView_Detail(APIView):
-#     def get_object(self, pk):
-#         try:
-#             return T2Produktuak.objects.get(pk=pk)
-#         except Produktua.DoesNotExist:
-#             raise Http404
+    def post(self, request, format=None):
+        serializer = ProduktuakSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class T2Consume_APIView_Detail(APIView):
+    def get_object(self, pk):
+        try:
+            return T2Product.objects.get(pk=pk)
+        except Produktua.DoesNotExist:
+            raise Http404
