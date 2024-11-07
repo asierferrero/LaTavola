@@ -174,5 +174,5 @@ ACCOUNT_USER_MODEL_EMAIL_FIELD = "username"
 LOGIN_URL = 'login'  
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'LaTavolaAplikazioa', 'static', 'img')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'LaTavolaAplikazioa', 'static')]
