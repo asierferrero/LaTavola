@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm
-from .models import Produktua
+from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm,AlergenoForm
+from .models import Produktua, Alergeno
 from django.contrib.auth.decorators import login_required
 from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
@@ -160,6 +160,10 @@ def produktuak_delete(request, id):
         return redirect('home')
     
     produktuak = get_object_or_404(Produktua, id=id)
+    
+    if produktuak.img:
+        produktuak.img.delete(save=False) 
+        
     if request.method == "POST":
         produktuak.delete()
         return redirect('produktuak-list')
@@ -208,3 +212,67 @@ def bezero_edit(request, id):
         return redirect('bezeroak-list')
 
     return render(request, 'bezero_edit.html', {'user': user})
+
+@login_required
+def admin_alergenoak_list(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    query = request.GET.get('q')
+    if query:
+        alergenoak_list = Alergeno.objects.filter(
+            Q(izena__icontains=query)
+        )
+    else:
+        alergenoak_list = Alergeno.objects.all()
+    return render(request, 'alergeno_zerrenda.html', {'alergenoak_list': alergenoak_list})
+
+
+@login_required
+def alergenoak_delete(request, id):
+    
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    alergenoak = get_object_or_404(Alergeno, id=id)
+    
+    if alergenoak.img:
+        alergenoak.img.delete(save=False) 
+        
+    if request.method == "POST":
+        alergenoak.delete()
+        return redirect('alergeno-list')
+    
+
+@login_required
+def alergenoa_new(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = AlergenoForm(request.POST, request.FILES) 
+        if form.is_valid():
+            form.save()  
+            return redirect('alergeno-list')
+    else:
+        form = AlergenoForm()
+    
+    return render(request, 'alergenoa_new.html', {'form': form})
+
+
+@login_required
+def alergenoak_edit(request, id):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    alergenoak = get_object_or_404(Alergeno, id=id)
+    
+    if request.method == "POST":
+        form = AlergenoForm(request.POST, request.FILES, instance=alergenoak)
+        if form.is_valid():
+            form.save()
+            return redirect('alergeno-list')  # Redirigir a la lista de productos
+    else:
+        form = AlergenoForm(instance=alergenoak)
+    
+    return render(request, 'alergenoa_new.html', {'form': form, 'produktuak': alergenoak})

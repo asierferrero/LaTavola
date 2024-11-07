@@ -8,12 +8,17 @@ urlpatterns = [
     
     path('admin-home/produktuak-list/', views.admin_produktuak_list , name='produktuak-list'),
     path('admin-home/produktuak-new/', views.produktua_new , name='produktuak-new'),
-    path('produktuak/delete/<int:id>/', views.produktuak_delete, name='produktuak-delete'),
-    path('produktuak/edit/<int:id>/', views.produktuak_edit, name='produktuak-edit'),
+    path('admin-home/produktuak/delete/<int:id>/', views.produktuak_delete, name='produktuak-delete'),
+    path('admin-home/produktuak/edit/<int:id>/', views.produktuak_edit, name='produktuak-edit'),
     
     path('admin-home/bezeroak-list/', views.admin_bezeroak_list , name='bezeroak-list'),
-    path('bezeroak/delete/<int:id>/', views.bezeroak_delete, name='bezeroak-delete'),
-    path('bezeroak/edit/<int:id>/', views.bezero_edit, name='bezero-edit'),
+    path('admin-home/bezeroak/delete/<int:id>/', views.bezeroak_delete, name='bezeroak-delete'),
+    path('admin-home/bezeroak/edit/<int:id>/', views.bezero_edit, name='bezero-edit'),
+    
+    path('admin-home/alergenoak-list/', views.admin_alergenoak_list, name='alergeno-list'),
+    path('admin-home/alergenoak/delete/<int:id>/', views.alergenoak_delete, name='alergenoak-delete'),
+    path('admin-home/alergenoak-new/', views.alergenoa_new , name='alergenoak-new'),
+    path('admin-home/alergenoak/edit/<int:id>/', views.alergenoak_edit, name='alergenoak-edit'),
     
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
