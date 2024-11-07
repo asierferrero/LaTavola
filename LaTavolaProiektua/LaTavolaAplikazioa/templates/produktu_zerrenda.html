@@ -35,10 +35,10 @@
                 <td>{{ produktuak.deskripzioa }}</td>
                 <td>
                     {% if produktuak.img %}
-                        <img src="{{ produktuak.img.url }}" alt="{{ produktuak.izena }}" style="width: 100px; height: auto;"> 
-                    {% else %}
-                        <span>No image</span>
-                    {% endif %}
+                    <img src="{{ produktuak.img.url }}" alt="{{ produktuak.izena }}" style="width: 100px; height: auto;"> 
+                {% else %}
+                    <span>No image</span>
+                {% endif %}
                 </td>
                 <td>
                     <form method="POST" action="{% url 'produktuak-delete' produktuak.id %}" style="display:inline;">

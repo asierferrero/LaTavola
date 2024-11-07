@@ -28,18 +28,37 @@ class Langilea(models.Model):
 class Alergeno(models.Model):
     id = models.AutoField(primary_key=True)
     izena = models.CharField(max_length=100)
+    img = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.izena
 
 class Produktua(models.Model):
+    HASIERAKOA = 'hasierakoa'
+    LEHENA = 'lehena'
+    BIGARRENA = 'bigarrena'
+    GEHIGARRIA = 'gehigarria'
+    POSTREA = 'postrea'
+    KAFEA = 'kafea'
+
+    MOTA_CHOICES = [
+        (HASIERAKOA, 'Hasierakoa'),
+        (LEHENA, 'Lehena'),
+        (BIGARRENA, 'Bigarrena'),
+        (GEHIGARRIA, 'Gehigarria'),
+        (POSTREA, 'Postrea'),
+        (KAFEA, 'Kafea'),
+    ]
+    
     id = models.AutoField(primary_key=True)
     izena = models.CharField(max_length=100)
     deskripzioa = models.CharField(max_length=300, null=True)
     alergenoak = models.ManyToManyField(Alergeno)
-    img = models.ImageField(upload_to='produktuak', null=True, blank=True)
+    img = models.ImageField(null=True, blank=True)
     prezioa = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.IntegerField()
+    mota = models.CharField(max_length=100, choices=MOTA_CHOICES, null=True)
+    adin_nagusikoa = models.BooleanField(default=False)
 
     def __str__(self):
         return self.izena
