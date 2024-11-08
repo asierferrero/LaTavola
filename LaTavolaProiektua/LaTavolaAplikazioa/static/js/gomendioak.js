@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $.ajax({
-    url: "/api/produktuak",
+    url: "/api/produktuak/",
     method: "GET",
     success: function (data) {
       function shuffle(array) {
