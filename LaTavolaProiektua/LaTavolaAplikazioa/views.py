@@ -115,15 +115,11 @@ def saskia(request):
 
 class Produktuak_APIView(APIView):
     def get(self, request, format=None, *args, **kwargs):
-        if not request.user.is_staff:
-            return redirect('home')
         produktuak = Produktua.objects.prefetch_related('alergenoak').all()  # Produktuak bakoitzaren alergenoekin erlazionatu
         serializer = ProduktuakSerializers(produktuak, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        if not request.user.is_staff:
-            return redirect('home')
         serializer = ProduktuakSerializers(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -133,23 +129,17 @@ class Produktuak_APIView(APIView):
 
 class Produktuak_APIView_Detail(APIView):
     def get_object(self, pk,request):
-        if not request.user.is_staff:
-            return redirect('home')
         try:
             return Produktua.objects.get(pk=pk)
         except Produktua.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
-        if not request.user.is_staff:
-            return redirect('home')
         produktua = self.get_object(pk)
         serializer = ProduktuakSerializers(produktua)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        if not request.user.is_staff:
-            return redirect('home')
         produktua = self.get_object(pk)
         serializer = ProduktuakSerializers(produktua, data=request.data)
         if serializer.is_valid():
@@ -158,8 +148,6 @@ class Produktuak_APIView_Detail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        if not request.user.is_staff:
-            return redirect('home')
         produktua = self.get_object(pk)
         produktua.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -168,15 +156,11 @@ class Produktuak_APIView_Detail(APIView):
 #TODO terminar las funciones para consumir el REST API cuando el grupo de Alberdi tenga terminado el API
 class T2Consume_API(APIView):
     def get(self, request, format=None, *args, **kwargs):
-        if not request.user.is_staff:
-            return redirect('home')
         produktuak = requests.get('http://192.168.73.26:8000/v1/product')
         serializer = T2ProduktuakSerializer(produktuak, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        if not request.user.is_staff:
-            return redirect('home')
         serializer = T2ProduktuakSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -186,8 +170,6 @@ class T2Consume_API(APIView):
 
 class T2Consume_APIView_Detail(APIView):
     def get_object(self, pk,request):
-        if not request.user.is_staff:
-            return redirect('home')
         try:
             return T2Product.objects.get(pk=pk)
         except Produktua.DoesNotExist:
