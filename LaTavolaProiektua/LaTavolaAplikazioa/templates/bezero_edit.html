@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center text-primary">Editatu Bezeroa</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Erabiltzaile Izena</label>
+            <input type="text" class="form-control" id="username" value="{{ user.username }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="is_staff">Is Staff:</label>
+            <input type="checkbox" id="is_staff" name="is_staff" {% if user.is_staff %}checked{% endif %}>
+        </div>
+        <button type="submit" class="btn btn-primary">Gorde</button>
+        <a href="{% url 'bezeroak-list' %}" class="btn btn-secondary">Atzera</a>
+    </form>
+</div>
+{% endblock %}

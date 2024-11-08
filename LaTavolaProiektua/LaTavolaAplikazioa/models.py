@@ -27,8 +27,8 @@ class Langilea(models.Model):
 
 class Alergeno(models.Model):
     id = models.AutoField(primary_key=True)
-    izena = models.CharField(max_length=100)
-    img = models.CharField(max_length=100, null=True)
+    izena = models.CharField(max_length=100, unique=True)
+    img = models.ImageField(upload_to='LaTavolaAplikazioa/static/img',null=True, blank=True)
 
     def __str__(self):
         return self.izena
@@ -51,10 +51,10 @@ class Produktua(models.Model):
     ]
     
     id = models.AutoField(primary_key=True)
-    izena = models.CharField(max_length=100)
+    izena = models.CharField(max_length=100,unique=True)#unique hau 2 izen berdineko 2 produktu ez izateko
     deskripzioa = models.CharField(max_length=300, null=True)
     alergenoak = models.ManyToManyField(Alergeno)
-    img = models.CharField(max_length=100, null=True)
+    img = models.ImageField(upload_to='LaTavolaAplikazioa/static/img',null=True, blank=True)
     prezioa = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.IntegerField()
     mota = models.CharField(max_length=100, choices=MOTA_CHOICES, null=True)

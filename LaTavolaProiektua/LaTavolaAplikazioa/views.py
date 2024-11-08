@@ -1,18 +1,20 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
-import requests
-from .forms import RegisterForm, LoginForm, ProfileForm
-from .models import Produktua
 from django.contrib.auth.decorators import login_required
+from django.utils.encoding import force_bytes
+from django.contrib.auth.models import User
+from django.db.models import Q
+from django.http import JsonResponse, Http404
+from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm
+from .models import Produktua, Alergeno, T2Product
+from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
+from .import consume
+import requests
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import ProduktuakSerializers,T2ProduktuakSerializer,T2AlergenoSerializer
 from rest_framework import status
-from django.http import Http404
-from . import consume
-from .models import T2Product
 from rest_framework.authtoken.models import Token
 
 User = get_user_model()
@@ -20,6 +22,57 @@ User = get_user_model()
 
 def main(request):
     return render(request, 'home.html', {})
+
+@login_required
+def admin_home_view(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    user_profile = request.user  # Obtener el perfil del usuario
+    
+    # Obtener los datos necesarios para el gráfico
+    productos = Produktua.objects.all()
+    nombres = [producto.izena for producto in productos]
+    stock = [producto.stock for producto in productos]
+    precios = [float(producto.prezioa) for producto in productos]
+    
+    return render(request, 'admin_home.html', {
+        'user_profile': user_profile,
+        'nombres': nombres,
+        'stock': stock,
+        'precios': precios,
+    })
+
+@login_required
+def admin_bezeroak_list(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    query = request.GET.get('q')
+    if query:
+        bezero_list = User.objects.filter(
+            Q(username__icontains=query)
+        )
+    else:
+        bezero_list = User.objects.all()
+    return render(request, 'bezero_zerrenda.html', {'bezero_list': bezero_list})
+
+@login_required
+def admin_produktuak_list(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    query = request.GET.get('q')  # Obtiene el name del input
+    if query:
+        # Filtra el nombre segun el input metido
+        produktu_list = Produktua.objects.filter(
+            Q(izena__icontains=query)
+        )
+    else:
+        # Si no lo encuentra aparece toda la lista
+        produktu_list = Produktua.objects.all()
+    
+    return render(request, 'produktu_zerrenda.html', {'produktu_list': produktu_list})
 
 
 def login_view(request):
@@ -34,7 +87,10 @@ def login_view(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('home')
+                    if user.is_staff:
+                        return redirect('admin_home')
+                    else:
+                        return redirect('home')
 
     else:
         form = LoginForm()
@@ -108,9 +164,149 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
-
+  
 def saskia(request):
     return render(request, 'saskia.html', {})
+  
+
+@login_required
+def produktua_new(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = ProduktuaForm(request.POST, request.FILES) 
+        if form.is_valid():
+            form.save()  
+            return redirect('produktuak-list')
+    else:
+        form = ProduktuaForm()
+    
+    return render(request, 'produktua_new.html', {'form': form})
+
+@login_required
+def produktuak_delete(request, id):
+    
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    produktuak = get_object_or_404(Produktua, id=id)
+    
+    if produktuak.img:
+        produktuak.img.delete(save=False) 
+        
+    if request.method == "POST":
+        produktuak.delete()
+        return redirect('produktuak-list')
+    
+@login_required
+def produktuak_edit(request, id):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    produktuak = get_object_or_404(Produktua, id=id)
+    
+    if request.method == "POST":
+        form = ProduktuaForm(request.POST, request.FILES, instance=produktuak)
+        if form.is_valid():
+            form.save()
+            return redirect('produktuak-list')  # Redirigir a la lista de productos
+    else:
+        form = ProduktuaForm(instance=produktuak)
+    
+    return render(request, 'produktua_new.html', {'form': form, 'produktuak': produktuak})
+
+@login_required
+def bezeroak_delete(request, id):
+    
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    bezeroak = get_object_or_404(User, id=id)
+    
+    if request.method == "POST":
+        bezeroak.delete()
+        return redirect('bezeroak-list')
+    
+
+@login_required
+def bezero_edit(request, id):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    user = get_object_or_404(User, id=id)
+
+    if request.method == "POST":
+        is_staff = request.POST.get('is_staff') == 'on'
+        user.is_staff = is_staff 
+        user.save()
+        return redirect('bezeroak-list')
+
+    return render(request, 'bezero_edit.html', {'user': user})
+
+@login_required
+def admin_alergenoak_list(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    query = request.GET.get('q')
+    if query:
+        alergenoak_list = Alergeno.objects.filter(
+            Q(izena__icontains=query)
+        )
+    else:
+        alergenoak_list = Alergeno.objects.all()
+    return render(request, 'alergeno_zerrenda.html', {'alergenoak_list': alergenoak_list})
+
+
+@login_required
+def alergenoak_delete(request, id):
+    
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    alergenoak = get_object_or_404(Alergeno, id=id)
+    
+    if alergenoak.img:
+        alergenoak.img.delete(save=False) 
+        
+    if request.method == "POST":
+        alergenoak.delete()
+        return redirect('alergeno-list')
+    
+
+@login_required
+def alergenoa_new(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = AlergenoForm(request.POST, request.FILES) 
+        if form.is_valid():
+            form.save()  
+            return redirect('alergeno-list')
+    else:
+        form = AlergenoForm()
+    
+    return render(request, 'alergenoa_new.html', {'form': form})
+
+
+@login_required
+def alergenoak_edit(request, id):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    alergenoak = get_object_or_404(Alergeno, id=id)
+    
+    if request.method == "POST":
+        form = AlergenoForm(request.POST, request.FILES, instance=alergenoak)
+        if form.is_valid():
+            form.save()
+            return redirect('alergeno-list')  # Redirigir a la lista de productos
+    else:
+        form = AlergenoForm(instance=alergenoak)
+    
+    return render(request, 'alergenoa_new.html', {'form': form, 'produktuak': alergenoak})
 
 
 class Produktuak_APIView(APIView):

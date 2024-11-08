@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %} 
+
+<div class="container mt-4">
+    <h1 class="text-center text-primary">Alergeno Lista</h1>
+
+    <form method="GET" action="" class="form-inline mb-4">
+        <input type="text" name="q" placeholder="Sartu alergenoaren izena" class="form-control mr-2" value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary">Bilatu</button>
+        <a href="{% url 'alergeno-list' %}" class="btn btn-secondary ml-2">Berrabiarazi</a>
+    </form>
+
+    <div class="text-center mt-4 mb-4">
+        <a href="{% url 'alergenoak-new' %}"><button class="btn btn-primary">Alergenoa gehitu</button></a>
+        <a href="{% url 'admin_home' %}"><button class="btn btn-danger">Atzera</button></a>
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Izena</th>
+                <th>Argazkia</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alergeno in alergenoak_list %}
+            <tr>
+                <td>{{ alergeno.izena }}</td>
+                <td>
+                    {% if alergeno.img %}
+                        <img src="{{ alergeno.img.url }}" alt="{{ alergeno.izena }}" style="width: 100px; height: auto;"> 
+                    {% else %}
+                        <span>No image</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="POST" action="{% url 'alergenoak-delete' alergeno.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="bi bi-trash btn btn-danger" onclick="return confirm('Benetako borratu nahi duzula?');"></button>
+                    </form>
+                </td>
+                <td>
+                    <a href="{% url 'alergenoak-edit' alergeno.id %}" class="bi bi-pencil-square btn btn-info"></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
