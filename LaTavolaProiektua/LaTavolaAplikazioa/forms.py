@@ -39,6 +39,18 @@ class LoginForm(forms.Form):
 
         return cleaned_data
 
+class ChangePasswordForm(forms.Form):
+    email = forms.CharField(
+        label='Emaila',
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder':'Sartu zure Email-a',
+            'required': True}
+        )
+    )
+    def clean(self):
+        cleaned_data = super().clean()
+
 
 class RegisterForm(forms.ModelForm):
     first_name = forms.CharField(
@@ -108,7 +120,7 @@ class ProfileForm(forms.ModelForm):
         }
 
 class ProduktuaForm(forms.ModelForm):
-     class Meta:
+    class Meta:
         model = Produktua
         fields = ['izena', 'deskripzioa', 'alergenoak','mota' ,  'img', 'prezioa', 'stock']
         

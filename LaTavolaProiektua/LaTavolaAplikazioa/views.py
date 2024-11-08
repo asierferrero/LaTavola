@@ -7,7 +7,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse, Http404
-from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm
+from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm,ChangePasswordForm
 from .models import Produktua, Alergeno, T2Product
 from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
 from .import consume
@@ -97,6 +97,28 @@ def login_view(request):
 
     return render(request, 'login.html', {'form': form})
 
+def pasahitza_aldatu_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            Email = form.cleaned_data['Email']
+
+            send_password_email(Email)
+
+    else:
+        form = ChangePasswordForm()
+
+    return render(request, 'login.html', {'form': form})
+
+def send_password_email(Email):
+    try:
+        verification_url = f"{settings.SITE_URL}/verify/{"user.id"}/"#hay que cambiar el user id
+        subject = "Zure kontua egiaztatu"
+        message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {
+            verification_url}"
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [Email])
+    except Exception as e:
+        print(f"Errorea emaila bidaltzerakoan: {e}")
 
 def register_view(request):
     if request.method == 'POST':

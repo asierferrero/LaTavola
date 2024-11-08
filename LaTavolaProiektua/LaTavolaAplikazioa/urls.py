@@ -22,6 +22,7 @@ urlpatterns = [
     
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
+    path('pasahitza_aldatu/', views.pasahitza_aldatu_view, name='pasahitza_aldatu'),
     path('profile/', views.profile_view, name='profile'),
     path('logout/', views.logout_view, name='logout'),
     path('saskia/', views.saskia, name='saskia'),
