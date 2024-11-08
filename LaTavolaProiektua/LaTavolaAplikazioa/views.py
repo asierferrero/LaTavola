@@ -392,3 +392,9 @@ class T2Consume_APIView_Detail(APIView):
             return T2Product.objects.get(pk=pk)
         except Produktua.DoesNotExist:
             raise Http404
+        
+
+@login_required
+def order_confirmation(request):
+    user_profile = request.user
+    return render(request, 'order_confirmation.html', {'user_profile': user_profile})
