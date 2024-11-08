@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from .models import Produktua, Alergeno
+from .models import Produktua, Alergeno, Iritzia
 User = get_user_model()
 
 
@@ -118,3 +118,12 @@ class AlergenoForm(forms.ModelForm):
         model = Alergeno
         fields = ['izena', 'img']
         
+
+class IritziaForm(forms.ModelForm):
+    class Meta:
+        model = Iritzia
+        fields = ['comentario', 'calificacion']
+        widgets = {
+            'comentario': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
+            # No necesitamos definir `calificacion` aquí; lo personalizaremos en la plantilla
+        }

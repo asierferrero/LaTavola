@@ -7,7 +7,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse, Http404
-from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm
+from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm, IritziaForm
 from .models import Produktua, Alergeno, T2Product
 from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
 from .import consume
@@ -370,3 +370,18 @@ class T2Consume_APIView_Detail(APIView):
             return T2Product.objects.get(pk=pk)
         except Produktua.DoesNotExist:
             raise Http404
+
+
+@login_required
+def iritzia_sartu(request):
+    if request.method == 'POST':
+        form = IritziaForm(request.POST)
+        if form.is_valid():
+            opinion = form.save(commit=False)  # No guardamos aún en la base de datos
+            opinion.usuario = request.user     # Asigna el usuario autenticado
+            opinion.save()                     # Ahora sí guardamos en la base de datos
+            return redirect('pagina_opiniones')
+    else:
+        form = IritziaForm()
+    
+    return render(request, 'iritzia_sartu.html', {'form': form})

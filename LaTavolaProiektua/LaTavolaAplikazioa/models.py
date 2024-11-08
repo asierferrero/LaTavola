@@ -74,13 +74,13 @@ class Eskaria(models.Model):
         return f"{self.id}{self.erabiltzailea}"
 
 class Iritzia(models.Model):
-    id = models.AutoField(primary_key=True)
-    erabiltzailea = models.ForeignKey(User, on_delete=models.CASCADE)
-    testua = models.TextField()
-    izarrak = models.IntegerField()
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)  
+    comentario = models.TextField()
+    calificacion = models.IntegerField(choices=[(i, i) for i in range(1, 6)]) 
+    fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.erabiltzailea}{self.izarrak}"
+        return f'{self.usuario.username} - {self.calificacion}'
 
 #TODO preguntar modelo BBDD del grupo de alberdi y terminar el MODELO
 class T2Product(models.Model):
