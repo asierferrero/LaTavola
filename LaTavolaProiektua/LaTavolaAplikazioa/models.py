@@ -27,7 +27,7 @@ class Langilea(models.Model):
 
 class Alergeno(models.Model):
     id = models.AutoField(primary_key=True)
-    izena = models.CharField(max_length=100)
+    izena = models.CharField(max_length=100, unique=True)
     img = models.ImageField(upload_to='LaTavolaAplikazioa/static/img',null=True, blank=True)
 
     def __str__(self):
@@ -51,7 +51,7 @@ class Produktua(models.Model):
     ]
     
     id = models.AutoField(primary_key=True)
-    izena = models.CharField(max_length=100)
+    izena = models.CharField(max_length=100,unique=True)#unique hau 2 izen berdineko 2 produktu ez izateko
     deskripzioa = models.CharField(max_length=300, null=True)
     alergenoak = models.ManyToManyField(Alergeno)
     img = models.ImageField(upload_to='LaTavolaAplikazioa/static/img',null=True, blank=True)
