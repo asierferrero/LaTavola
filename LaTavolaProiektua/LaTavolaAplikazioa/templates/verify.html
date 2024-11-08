@@ -1,24 +1,20 @@
-<html>
-  <body>
-    {% extends 'base.html' %}
-    {% block content %}
-      <section class="login-section py-5">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-md-6">
-              <div class="card p-4 shadow">
-                {% if success %}
-                  <p style="color: green">{{ success }}</p>
-                  <button type="submit" class="btn btn-danger btn-block" onclick="location.href='{% url 'home' %}'">Menura bueltatu</button><br>
-                {% endif %}
-                {% if error %}
-                  <p style="color: red">{{ error }}</p>
-                {% endif %}
-              </div>
-            </div>
+{% extends 'base.html' %}
+{% block content %}
+  <section class="login-section py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card p-4 shadow">
+            {% if success %}
+              <p style="color: green">{{ success }}</p>
+              <button type="submit" class="btn btn-danger btn-block" onclick="location.href='{% url 'home' %}'">Menura bueltatu</button><br />
+            {% endif %}
+            {% if error %}
+              <p style="color: red">{{ error }}</p>
+            {% endif %}
           </div>
         </div>
-      </section>
-    {% endblock %}
-  </body>
-</html>
+      </div>
+    </div>
+  </section>
+{% endblock %}

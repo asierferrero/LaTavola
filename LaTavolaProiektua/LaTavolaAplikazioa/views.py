@@ -2,15 +2,23 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm,AlergenoForm
-from .models import Produktua, Alergeno
 from django.contrib.auth.decorators import login_required
 from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
+from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm
+from .models import Produktua, Alergeno, T2Product
+from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
+from .import consume
+import requests
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.authtoken.models import Token
 
 User = get_user_model()
+
 
 def main(request):
     return render(request, 'home.html', {})
@@ -103,6 +111,8 @@ def register_view(request):
             send_verification_email(user)
 
             return render(request, 'register.html', {'form': form, 'success': 'Zure kontua egiaztatzeko mezu elektroniko bat bidali da helbide elektronikora'})
+        else:
+            return render(request, 'register.html', {'form': form, 'error': 'Ezin izan da zure kontua egiaztatzeko mezu elektroniko bat bidali'})
     else:
         form = RegisterForm()
 
@@ -110,25 +120,28 @@ def register_view(request):
 
 
 def send_verification_email(user):
-    verification_url = f"{settings.SITE_URL}/verify/{user.id}/{user.username}/"
-    subject = "Zure kontua egiaztatu"
-    message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {verification_url}"
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.username])
+    try:
+        verification_url = f"{settings.SITE_URL}/verify/{user.id}/"
+        subject = "Zure kontua egiaztatu"
+        message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {
+            verification_url}"
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [user.username])
+    except Exception as e:
+        print(f"Errorea emaila bidaltzerakoan: {e}")
 
 
-def verify_view(request, id, username):
-    user = User.objects.get(id=id)
-    
-    if user.username == username:
+def verify_view(request, id):
+    try:
+        user = User.objects.get(id=id)
         user.is_active = True
         user.save()
-        
+
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        
+
         return render(request, 'verify.html', {'success': 'Zure kontua egiaztatu da'})
-    else:
+    except Exception as e:
         return render(request, 'verify.html', {'error': 'Zure kontua ezin izan da egiaztatu'})
-    
+
 
 @login_required
 def profile_view(request):
@@ -137,12 +150,12 @@ def profile_view(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=user_profile)
         if form.is_valid():
-            form.save() 
-            return redirect('profile')  
+            form.save()
+            return redirect('profile')
         else:
-            print(form.errors) 
+            print(form.errors)
     else:
-        form = ProfileForm(instance=user_profile) 
+        form = ProfileForm(instance=user_profile)
 
     return render(request, 'profile.html', {'user_profile': user_profile, 'form': form})
 
@@ -150,6 +163,11 @@ def profile_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+  
+def saskia(request):
+    return render(request, 'saskia.html', {})
+  
 
 @login_required
 def produktua_new(request):
@@ -291,3 +309,64 @@ def alergenoak_edit(request, id):
     return render(request, 'alergenoa_new.html', {'form': form, 'produktuak': alergenoak})
 
 
+class Produktuak_APIView(APIView):
+    def get(self, request, format=None, *args, **kwargs):
+        produktuak = Produktua.objects.prefetch_related('alergenoak').all()  # Produktuak bakoitzaren alergenoekin erlazionatu
+        serializer = ProduktuakSerializers(produktuak, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = ProduktuakSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Produktuak_APIView_Detail(APIView):
+    def get_object(self, pk):
+        try:
+            return Produktua.objects.get(pk=pk)
+        except Produktua.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        produktua = self.get_object(pk)
+        serializer = ProduktuakSerializers(produktua)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        produktua = self.get_object(pk)
+        serializer = ProduktuakSerializers(produktua, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        produktua = self.get_object(pk)
+        produktua.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+#TODO terminar las funciones para consumir el REST API cuando el grupo de Alberdi tenga terminado el API
+class T2Consume_API(APIView):
+    def get(self, request, format=None, *args, **kwargs):
+        produktuak = requests.get('http://192.168.73.26:8000/v1/product')
+        serializer = T2ProduktuakSerializer(produktuak, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = T2ProduktuakSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class T2Consume_APIView_Detail(APIView):
+    def get_object(self, pk,request):
+        try:
+            return T2Product.objects.get(pk=pk)
+        except Produktua.DoesNotExist:
+            raise Http404

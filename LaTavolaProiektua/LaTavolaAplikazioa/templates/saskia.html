@@ -1,0 +1,96 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/gomendioak.js' %}"></script>
+<script src="{% static 'js/erosi.js' %}"></script>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1 class="mb-4 text-center">Saskia</h1>
+      <div id="cartItems" class="cart-items">
+        <!-- Saskiko produktuak erakutsi -->
+      </div>
+      <hr />
+      <div class="total text-center mt-4">
+        <h4>Guztira</h4>
+        <p id="totalPrice" class="total-price">0.00€</p>
+      </div>
+      <div class="text-center">
+        <button class="btn btn-danger btn-lg mt-3" onclick="erosi()" id="erosi">
+          EROSI
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-4" id="gomendioak">
+      <h2 class="text-center">Gomendatutako Platerrak</h2>
+      <!-- AJAX -->
+    </div>
+  </div>
+</div>
+
+<style>
+  .container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  h1,
+  h2 {
+    color: #333;
+    font-weight: 600;
+  }
+  .cart-items p,
+  .total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+  }
+  .price,
+  .total-price {
+    font-weight: bold;
+  }
+  .total-price {
+    color: #dc3545;
+    font-size: 1.4rem;
+  }
+  .recommended-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  .recommended-img-container {
+    max-width: 100px;
+    margin: 0 auto 10px;
+  }
+  .recommended-img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  .recommended-text {
+    text-align: center;
+  }
+  .btn-small {
+    padding: 0.2rem 0.6rem;
+    margin: 0 5px;
+    font-size: 0.9rem;
+  }
+  .cart-item-buttons {
+    display: flex;
+    justify-content: end;
+    gap: 0.3rem;
+    flex-grow: 1;
+  }
+  .price {
+    font-weight: bold;
+    width: 60px; /* Ajusta el ancho según sea necesario */
+    text-align: right;
+  }
+</style>
+
+<script>
+  
+</script>
+{% endblock %}
