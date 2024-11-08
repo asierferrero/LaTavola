@@ -128,7 +128,7 @@ class Produktuak_APIView(APIView):
 
 
 class Produktuak_APIView_Detail(APIView):
-    def get_object(self, pk,request):
+    def get_object(self, pk):
         try:
             return Produktua.objects.get(pk=pk)
         except Produktua.DoesNotExist:

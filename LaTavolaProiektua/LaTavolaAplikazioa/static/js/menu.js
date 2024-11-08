@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $.ajax({
-    url: "/api/produktuak",
+    url: "/api/produktuak/",
     method: "GET",
     success: function (data) {
       data.forEach(function (item, index) {
@@ -9,7 +9,7 @@ $(document).ready(function () {
         `).join('');
 
         $("#menu-items").append(`
-          <div class="col-2 col-md-2">
+          <div class="col-12 col-md-2">
             <div class="menu-item card">
               <img src="${item.img}" alt="${item.izena}" class="card-img-top rounded" />
               <div class="card-body text-start">
@@ -77,9 +77,8 @@ $(document).ready(function () {
         const price = parseFloat($(this).data("price"));
         const index = $(this).data("index");
         const quantity = parseInt($(`.quantity[data-index="${index}"]`).text());
-        addToCart(name, price, quantity);
+        addToCart(index + 1, name, price, quantity);
 
-        // Cerrar el modal después de añadir al carrito
         $(`#productModal-${index}`).modal('hide');
       });
     },
@@ -88,19 +87,20 @@ $(document).ready(function () {
     },
   });
 
-  function addToCart(productName, productPrice, quantity) {
+  function addToCart(id, izena, prezioa, quantity) {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingProductIndex = cart.findIndex((item) => item.name === productName);
+    
+    const existingProductIndex = cart.findIndex((item) => item.id === id);
 
     if (existingProductIndex > -1) {
-      cart[existingProductIndex].quantity += quantity;
+        cart[existingProductIndex].quantity += quantity;
     } else {
-      cart.push({ name: productName, price: productPrice, quantity: quantity });
+        cart.push({ id: id, name: izena, price: prezioa, quantity: quantity });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
 
     const notification = $("#notification");
-    notification.stop().fadeIn(300).delay(1000).fadeOut(300); 
-  }
+    notification.stop().fadeIn(300).delay(1000).fadeOut(300);
+}
 });
