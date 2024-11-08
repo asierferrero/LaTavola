@@ -3,23 +3,26 @@
 {% block content %}
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
   <script src="{% static 'js/menu.js' %}"></script>
+  <script src="{% static 'js/carousel.js' %}"></script>
   <script type="text/javascript">
     var staticUrl = "{% static '' %}"
   </script>
-  
-  <div class="hero-image"></div>
-  <section class="hero py-3">
+
+  <div class="hero-image"><!-- Argazkia --></div>
+  <section class="hero py-5">
     <div class="container">
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <img src="{% static 'img/pasta.png' %}" alt="Plato de Pasta" class="img-fluid rounded" />
+      <div class="carousel slide" id="carouselExampleIndicators" data-bs-ride="carousel">
+        <div class="carousel-inner" id="carouselItems">
+          <!-- Karruseleko argazkiak -->
         </div>
-        <div class="col-md-6">
-          <h2 class="display-4">Italiar Janaria</h2>
-          <p>Gozatu gure plater tradizionalez zure etxeko erosotasunean.</p>
-          <a class="btn btn-danger btn-lg">Eskatu</a>
-        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </a>
       </div>
     </div>
   </section>
@@ -28,12 +31,12 @@
     <div class="container-fluid">
       <h2 class="display-4">Menua</h2>
       <div class="row mt-4" id="menu-items">
-        {% comment %}AJAX{% endcomment %}
+        <!-- AJAX -->
       </div>
     </div>
   </section>
 
- <div id="notification" style="
+  <div id="notification" style="
     display: none;
     position: fixed;
     bottom: 20px;
@@ -46,9 +49,5 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     font-size: 16px;
     transition: opacity 0.3s ease;
-    text-align: center;">
-Produktua saskira gehituta
-  </div>
-
-
+    text-align: center;">Produktua saskira gehituta</div>
 {% endblock %}

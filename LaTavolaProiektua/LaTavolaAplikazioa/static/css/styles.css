@@ -23,9 +23,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 0;
   background-color: #eaeaea;
-  padding-top: 5rem;
 }
 
 .header {
@@ -56,3 +54,35 @@ body {
   width: 35%;
   margin-left: 20px;
 }
+
+.carousel-control-prev,
+.carousel-control-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-control-prev {
+  left: -200px;
+}
+
+.carousel-control-next {
+  right: -200px;
+}
+
+.carousel-item {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.carousel-fade .carousel-item {
+  opacity: 0;
+  transition-duration: 1s;
+}
+
+.carousel-fade .carousel-item.active {
+  opacity: 1;
+}
+
+
