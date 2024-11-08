@@ -29,8 +29,3 @@ class T2ProduktuakSerializer(serializers.ModelSerializer):
     class Meta:
         model = T2Product
         fields = '__all__'
-
-# class T2AlergenoSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Alergeno
-#         fields = ['izena', 'img']

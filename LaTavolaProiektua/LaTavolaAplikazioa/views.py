@@ -13,6 +13,7 @@ from rest_framework import status
 from django.http import Http404
 from . import consume
 from .models import T2Product
+from rest_framework.authtoken.models import Token
 
 User = get_user_model()
 
