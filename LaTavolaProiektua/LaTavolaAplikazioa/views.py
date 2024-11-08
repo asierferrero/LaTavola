@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.http import JsonResponse
 
 User = get_user_model()
 
@@ -19,8 +20,20 @@ def admin_home_view(request):
     if not request.user.is_staff:
         return redirect('home')
     
-    user_profile = User.objects.get(id=request.user.id)
-    return render(request, 'admin_home.html', {'user_profile': user_profile})
+    user_profile = request.user  # Obtener el perfil del usuario
+    
+    # Obtener los datos necesarios para el gráfico
+    productos = Produktua.objects.all()
+    nombres = [producto.izena for producto in productos]
+    stock = [producto.stock for producto in productos]
+    precios = [float(producto.prezioa) for producto in productos]
+    
+    return render(request, 'admin_home.html', {
+        'user_profile': user_profile,
+        'nombres': nombres,
+        'stock': stock,
+        'precios': precios,
+    })
 
 @login_required
 def admin_bezeroak_list(request):
@@ -276,3 +289,5 @@ def alergenoak_edit(request, id):
         form = AlergenoForm(instance=alergenoak)
     
     return render(request, 'alergenoa_new.html', {'form': form, 'produktuak': alergenoak})
+
+
