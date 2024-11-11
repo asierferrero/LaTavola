@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -39,5 +39,9 @@ urlpatterns = [
     path('api/contsumituT2/', views.T2Consume_API.as_view()),
     
     path('order/confirmation/', views.order_confirmation, name='order_confirmation'),
-
+    path('paypal/', include('paypal.standard.ipn.urls')),
+    path('payment/', views.paypal_redirect, name='paypal-redirect'),
+    path('pago/', views.paypal_redirect, name='payment'),
+    path('payment_done/', views.payment_complete, name='payment_done'),
+    path('payment_cancel/', views.payment_cancel, name='payment_cancel'),
 ]

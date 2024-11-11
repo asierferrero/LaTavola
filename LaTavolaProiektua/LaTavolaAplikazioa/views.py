@@ -7,6 +7,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse, Http404
+import urllib
 from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm,ChangePasswordForm, IritziaForm
 from .models import Produktua, Alergeno, T2Product, Iritzia
 from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
@@ -16,6 +17,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -441,3 +445,22 @@ def iritziak_delete(request, id):
         iritziak.delete() 
         return redirect('iritziak-list') 
 
+def paypal_redirect(request):
+    paypal_url = 'https://www.paypal.com/cgi-bin/webscr'
+    paypal_data = {
+        'cmd': '_xclick',
+        'business': 'pjulen.muni@gmail.com',  
+        'amount': '01.00', 
+        'currency_code': 'EUR',  
+        'item_name': 'Tu Pedido',
+        'return': 'http://localhost:8000/payment_done/',
+        'cancel_return': 'http://localhost:8000/payment_cancel/',
+    }
+    
+    return redirect(f'{paypal_url}?{urllib.parse.urlencode(paypal_data)}')
+
+def payment_complete(request):
+    return render(request, 'payment_complete.html')
+
+def payment_cancel(request):
+    return render(request, 'payment_cancel.html')

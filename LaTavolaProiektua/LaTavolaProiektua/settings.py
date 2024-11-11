@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'rest_framework.authtoken',
-    'LaTavolaAplikazioa'
+    'LaTavolaAplikazioa',
+    'paypal.standard.ipn'
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -177,3 +178,6 @@ LOGIN_URL = 'login'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'LaTavolaAplikazioa', 'static')]
+
+PAYPAL_RECEIVER_EMAIL = 'pjulen.muni@gmail.com'
+PAYPAL_TEST = True  # True para pruebas, False para producción

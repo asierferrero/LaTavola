@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center py-5">
+    <h2 class="mb-4">Pago Cancelado</h2>
+    <div class="card p-4 shadow">
+        <p>Lamentamos que no hayas completado tu pago. Si tienes alguna duda, por favor contacta con nuestro soporte.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary">Volver al inicio</a>
+    </div>
+</div>
+{% endblock %}
