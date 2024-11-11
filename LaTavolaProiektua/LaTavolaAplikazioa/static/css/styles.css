@@ -85,6 +85,69 @@ body {
   opacity: 1;
 }
 
+#menu-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.menu-item.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+.menu-item.card:hover {
+  transform: translateY(-5px);
+}
+
+.menu-item img {
+  border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+  background-color: #f8f9fa;
+}
+
+.card-title {
+  font-size: 1.25em;
+  color: #333;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 0.95em;
+  color: #555;
+}
+
+.modal-header, .modal-body {
+  background-color: #f3f3f3;
+}
+
+.modal-title {
+  color: #333;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.add-to-cart {
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.category-title {
+  font-size: 3em;
+  color: #d9534f;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  text-align: center;
+}
 
 /* Iritzi panela erabiltzeko estiloa */
 
@@ -113,3 +176,4 @@ body {
 .balorazioa > label:hover ~ label {
   color: #f5b301;
 } */
+
