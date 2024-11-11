@@ -29,6 +29,7 @@ urlpatterns = [
     path('iritzia/', views.iritzia_sartu, name='iritzia_sartu'),
     
     path('verify/<int:id>/', views.verify_view, name='verify'),
+    path('verify_password/<str:Email>/', views.verify_password_view, name='verify_password'),
     
     path('api/produktuak/', views.Produktuak_APIView.as_view()),
     path('api/produktuak/<int:pk>/', views.Produktuak_APIView_Detail.as_view()),

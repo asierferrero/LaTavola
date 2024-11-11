@@ -101,17 +101,20 @@ def pasahitza_aldatu_view(request):
         if form.is_valid():
             Email = form.cleaned_data['Emaila']
             send_password_email(Email)
-            return render(request, 'login.html', {'form': form})
+            return render(request, 'password_changed.html', {'form': form, 'success': 'Zure pasahitza aldatzeko mezu elektroniko bat bidali da helbide elektronikora'})
+        else:
+            return render(request, 'password_changed.html', {'form': form, 'error': 'Ezin izan da zure pasahitza aldatzeko mezu elektroniko bat bidali'})
     else:
         form = ChangePasswordForm()
     return render(request,'login.html',{'form': form})
 
 
 def send_password_email(Email):
-    try:
-        verification_url = f"{settings.SITE_URL}/verify/{"user.id"}/"#hay que cambiar el user id
-        subject = "Zure kontua egiaztatu"
-        message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {
+    try:       
+        
+        verification_url = f"{settings.SITE_URL}/verify_password/{Email}/"#hay que cambiar el user id
+        subject = "Aldatu ezazu pasahitza"
+        message = f"Egin klik esteka honetan zure pasahitza aldatzeko: {
             verification_url}"
         send_mail(subject, message, settings.EMAIL_HOST_USER, [Email])
     except Exception as e:
@@ -160,6 +163,15 @@ def verify_view(request, id):
         return render(request, 'verify.html', {'success': 'Zure kontua egiaztatu da'})
     except Exception as e:
         return render(request, 'verify.html', {'error': 'Zure kontua ezin izan da egiaztatu'})
+    
+def verify_password_view(request,Email):
+    try:
+        user = User.objects.get(username=Email)
+
+        return render(request, 'verify_password.html', {'success': 'Zure pasahitza aldatu da'})
+    except Exception as e:
+        print(f"error:{e}")
+        return render(request, 'verify_password.html', {'error': 'Zure pasahitza ezin izan da aldatu'})
 
 
 @login_required
