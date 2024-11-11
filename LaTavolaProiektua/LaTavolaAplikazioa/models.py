@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, User
+from django.utils import timezone
 
 class UserManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
@@ -75,12 +76,13 @@ class Eskaria(models.Model):
 
 class Iritzia(models.Model):
     id = models.AutoField(primary_key=True)
-    erabiltzailea = models.ForeignKey(User, on_delete=models.CASCADE)
+    erabiltzailea = models.ForeignKey(User, on_delete=models.CASCADE)  
     testua = models.TextField()
-    izarrak = models.IntegerField()
+    izarrak = models.IntegerField(choices=[(i, i) for i in range(1, 6)]) 
+    data = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.erabiltzailea}{self.izarrak}"
+        return f'{self.erabiltzailea} - {self.izarrak}'
 
 #TODO preguntar modelo BBDD del grupo de alberdi y terminar el MODELO
 class T2Product(models.Model):

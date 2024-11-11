@@ -33,4 +33,27 @@
 
     <button type="submit" class="btn btn-primary">Iritzia Bidali</button>
   </form>
+
+  <style>
+    .rating {
+      direction: rtl;
+      unicode-bidi: bidi-override;
+      display: inline-flex;
+      font-size: 2em;
+    }
+    .rating > label {
+      color: #ddd;
+      cursor: pointer;
+    }
+    .rating > input:checked ~ label {
+      color: #f5b301;
+    }
+    .rating > input {
+      display: none;
+    }
+    .rating > label:hover,
+    .rating > label:hover ~ label {
+      color: #f5b301;
+    }
+  </style>
 {% endblock %}
