@@ -91,24 +91,21 @@ def login_view(request):
                         return redirect('admin_home')
                     else:
                         return redirect('home')
-
     else:
         form = LoginForm()
-
     return render(request, 'login.html', {'form': form})
 
 def pasahitza_aldatu_view(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = ChangePasswordForm(request.POST)
         if form.is_valid():
-            Email = form.cleaned_data['Email']
-
+            Email = form.cleaned_data['Emaila']
             send_password_email(Email)
-
+            return render(request, 'login.html', {'form': form})
     else:
         form = ChangePasswordForm()
+    return render(request,'login.html',{'form': form})
 
-    return render(request, 'login.html', {'form': form})
 
 def send_password_email(Email):
     try:
