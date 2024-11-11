@@ -40,7 +40,7 @@ class LoginForm(forms.Form):
         return cleaned_data
 
 class ChangePasswordForm(forms.Form):
-    email = forms.CharField(
+    Emaila = forms.EmailField(
         label='Emaila',
         widget=forms.EmailInput(attrs={
             'class': 'form-control',

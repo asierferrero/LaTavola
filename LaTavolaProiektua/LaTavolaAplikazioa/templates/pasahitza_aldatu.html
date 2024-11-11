@@ -66,13 +66,8 @@
       <a href="{% url 'logout' %}" class="logout btn btn-danger">Saioa Itxi</a>
     </div>
 
-    {% if user.is_staff %}
-    <div class="text-center mt-4">
-      <a href="{% url 'admin_home' %}" class="btn btn-primary"
-        >Admin Panelera joan</a
-      >
-    </div>
     {% endif %}
+
   </div>
 </section>
 
