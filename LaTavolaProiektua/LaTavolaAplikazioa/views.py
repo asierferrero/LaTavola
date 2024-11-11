@@ -7,11 +7,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse, Http404
-<<<<<<< HEAD
-from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm, IritziaForm
-=======
-from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm,ChangePasswordForm
->>>>>>> 58d8201c1f6a68b0ff065841dccd8be89002889f
+from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm,ChangePasswordForm, IritziaForm
 from .models import Produktua, Alergeno, T2Product
 from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
 from .import consume
