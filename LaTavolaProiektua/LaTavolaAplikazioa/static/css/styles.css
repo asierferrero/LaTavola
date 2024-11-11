@@ -86,3 +86,30 @@ body {
 }
 
 
+/* Iritzi panela erabiltzeko estiloa */
+
+
+/* .balorazioa {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  display: inline-flex;
+  font-size: 2em;
+}
+
+.balorazioa > label {
+  color: #ddd;
+  cursor: pointer;
+}
+
+.balorazioa > input:checked ~ label {
+  color: #f5b301;
+}
+
+.balorazioa > input {
+  display: none;
+}
+
+.balorazioa > label:hover,
+.balorazioa > label:hover ~ label {
+  color: #f5b301;
+} */

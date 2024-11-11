@@ -377,10 +377,10 @@ def iritzia_sartu(request):
     if request.method == 'POST':
         form = IritziaForm(request.POST)
         if form.is_valid():
-            opinion = form.save(commit=False)  # No guardamos aún en la base de datos
-            opinion.usuario = request.user     # Asigna el usuario autenticado
-            opinion.save()                     # Ahora sí guardamos en la base de datos
-            return redirect('pagina_opiniones')
+            opinion = form.save(commit=False)  
+            opinion.erabiltzailea = request.user     
+            opinion.save()                     
+            return redirect('home')
     else:
         form = IritziaForm()
     

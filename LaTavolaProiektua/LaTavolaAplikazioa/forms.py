@@ -122,8 +122,7 @@ class AlergenoForm(forms.ModelForm):
 class IritziaForm(forms.ModelForm):
     class Meta:
         model = Iritzia
-        fields = ['comentario', 'calificacion']
+        fields = ['testua', 'izarrak']
         widgets = {
-            'comentario': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
-            # No necesitamos definir `calificacion` aquí; lo personalizaremos en la plantilla
+            'testua': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
         }
