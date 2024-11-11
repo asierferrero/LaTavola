@@ -7,7 +7,11 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse, Http404
+<<<<<<< HEAD
 from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm, IritziaForm
+=======
+from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm,ChangePasswordForm
+>>>>>>> 58d8201c1f6a68b0ff065841dccd8be89002889f
 from .models import Produktua, Alergeno, T2Product
 from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
 from .import consume
@@ -97,6 +101,28 @@ def login_view(request):
 
     return render(request, 'login.html', {'form': form})
 
+def pasahitza_aldatu_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            Email = form.cleaned_data['Email']
+
+            send_password_email(Email)
+
+    else:
+        form = ChangePasswordForm()
+
+    return render(request, 'login.html', {'form': form})
+
+def send_password_email(Email):
+    try:
+        verification_url = f"{settings.SITE_URL}/verify/{"user.id"}/"#hay que cambiar el user id
+        subject = "Zure kontua egiaztatu"
+        message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {
+            verification_url}"
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [Email])
+    except Exception as e:
+        print(f"Errorea emaila bidaltzerakoan: {e}")
 
 def register_view(request):
     if request.method == 'POST':
@@ -385,3 +411,9 @@ def iritzia_sartu(request):
         form = IritziaForm()
     
     return render(request, 'iritzia_sartu.html', {'form': form})
+        
+
+@login_required
+def order_confirmation(request):
+    user_profile = request.user
+    return render(request, 'order_confirmation.html', {'user_profile': user_profile})

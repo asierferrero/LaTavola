@@ -2,7 +2,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{% static 'js/gomendioak.js' %}"></script>
-<script src="{% static 'js/erosi.js' %}"></script>
 <div class="container">
   <div class="row">
     <div class="col-md-8">
@@ -16,7 +15,7 @@
         <p id="totalPrice" class="total-price">0.00€</p>
       </div>
       <div class="text-center">
-        <button class="btn btn-danger btn-lg mt-3" onclick="erosi()" id="erosi">
+        <button class="btn btn-danger btn-lg mt-3" onclick="comprar()">
           EROSI
         </button>
       </div>
@@ -91,6 +90,96 @@
 </style>
 
 <script>
-  
+  function addToCart(productName, productPrice) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingProductIndex = cart.findIndex(
+      (item) => item.name === productName
+    );
+
+    if (existingProductIndex > -1) {
+      cart[existingProductIndex].quantity += 1;
+    } else {
+      cart.push({ name: productName, price: productPrice, quantity: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    displayCartItems();
+  }
+
+  function removeFromCart(productName) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart = cart.filter((item) => item.name !== productName);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    displayCartItems();
+  }
+
+  function updateQuantity(productName, change) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const product = cart.find((item) => item.name === productName);
+
+    if (product) {
+      product.quantity += change;
+      if (product.quantity <= 0) {
+        removeFromCart(productName);
+      } else {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        displayCartItems();
+      }
+    }
+  }
+
+  function displayCartItems() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartItemsContainer = document.getElementById("cartItems");
+    const totalPriceElement = document.getElementById("totalPrice");
+
+    cartItemsContainer.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item) => {
+      const itemElement = document.createElement("div");
+      itemElement.classList.add(
+        "cart-item",
+        "d-flex",
+        "align-items-center",
+        "justify-content-between",
+        "p-2",
+        "border",
+        "mb-2",
+        "rounded"
+      );
+      itemElement.innerHTML = `
+          <span>${item.name}</span>
+         <!-- En el HTML del item en el carrito -->
+          <div class="cart-item-buttons">
+            <button class="btn btn-danger btn-small" onclick="removeFromCart('${
+              item.name
+            }')">🗑️</button>
+            <button class="btn btn-secondary btn-small" onclick="updateQuantity('${
+              item.name
+            }', -1)">-</button>
+            <span>${item.quantity}x</span>
+            <button class="btn btn-secondary btn-small" onclick="updateQuantity('${
+              item.name
+            }', 1)">+</button>
+          </div>
+          <span class="price">${(item.price * item.quantity).toFixed(2)}€</span>
+          </div>
+        `;
+      cartItemsContainer.appendChild(itemElement);
+      total += item.price * item.quantity;
+    });
+
+    totalPriceElement.innerHTML = `${total.toFixed(2)}€`;
+  }
+
+  function comprar() {
+    localStorage.removeItem("cart");
+    displayCartItems();
+    window.location.href = "{% url 'order_confirmation' %}"; 
+}
+
+
+  document.addEventListener("DOMContentLoaded", displayCartItems);
 </script>
 {% endblock %}

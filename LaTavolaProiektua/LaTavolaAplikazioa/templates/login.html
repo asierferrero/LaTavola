@@ -12,6 +12,7 @@
               {{ form.as_p }}
               <button type="submit" class="btn btn-danger btn-block">Saioa hasi</button><br />
               <a class="text-danger" href="{% url 'register' %}">Ez zaude erregistratuta?</a>
+              <a class="text-danger" style="float:right" href="{% url 'pasahitza_aldatu' %}">Pasahitza ahaztu duzu?</a>
             </form>
             <hr />
             <form action="{% provider_login_url 'google' %}" method="POST">
