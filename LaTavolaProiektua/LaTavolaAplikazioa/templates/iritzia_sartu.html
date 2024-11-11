@@ -1,38 +1,54 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Utzi zure iritzia gure zerbitzuari buruz</h2>
-  <form method="post">
-    {% csrf_token %}
-    
-    <div class="form-group">
-      <label for="{{ form.testua.id_for_label }}">Zure iritzia</label>
-      {{ form.testua }}
-    </div>
+  <section class="login-section py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="card p-4 shadow">
+            <h2 class="text-center mb-4">Utzi zure iritzia gure zerbitzuari buruz</h2>
+            <div class="table-responsive">
+              <form method="post" class="form-horizontal">
+                {% csrf_token %}
+                <table class="table text-center" style="margin: 0 auto;">
+                  <tr>
+                    <td><strong>Zure iritzia</strong></td>
+                    <td>{{ form.testua }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Kalifikazioa</strong></td>
+                    <td>
+                      <div class="rating">
+                        <input type="radio" name="izarrak" id="star5" value="5" {% if form.izarrak.value == "5" %}checked{% endif %}>
+                        <label for="star5" title="5 estrellas">☆</label>
 
-    <div class="form-group">
-      <label>Kalifikazioa:</label>
-      <div class="rating">
-        <!-- Usamos el campo "izarrak" pero con radios personalizados -->
-        <input type="radio" name="izarrak" id="star5" value="5" {% if form.izarrak.value == "5" %}checked{% endif %}>
-        <label for="star5" title="5 estrellas">☆</label>
+                        <input type="radio" name="izarrak" id="star4" value="4" {% if form.izarrak.value == "4" %}checked{% endif %}>
+                        <label for="star4" title="4 estrellas">☆</label>
 
-        <input type="radio" name="izarrak" id="star4" value="4" {% if form.izarrak.value == "4" %}checked{% endif %}>
-        <label for="star4" title="4 estrellas">☆</label>
+                        <input type="radio" name="izarrak" id="star3" value="3" {% if form.izarrak.value == "3" %}checked{% endif %}>
+                        <label for="star3" title="3 estrellas">☆</label>
 
-        <input type="radio" name="izarrak" id="star3" value="3" {% if form.izarrak.value == "3" %}checked{% endif %}>
-        <label for="star3" title="3 estrellas">☆</label>
+                        <input type="radio" name="izarrak" id="star2" value="2" {% if form.izarrak.value == "2" %}checked{% endif %}>
+                        <label for="star2" title="2 estrellas">☆</label>
 
-        <input type="radio" name="izarrak" id="star2" value="2" {% if form.izarrak.value == "2" %}checked{% endif %}>
-        <label for="star2" title="2 estrellas">☆</label>
-
-        <input type="radio" name="izarrak" id="star1" value="1" {% if form.izarrak.value == "1" %}checked{% endif %}>
-        <label for="star1" title="1 estrella">☆</label>
+                        <input type="radio" name="izarrak" id="star1" value="1" {% if form.izarrak.value == "1" %}checked{% endif %}>
+                        <label for="star1" title="1 estrella">☆</label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <button type="submit" class="btn btn-primary w-100">Iritzia Bidali</button>
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <button type="submit" class="btn btn-primary">Iritzia Bidali</button>
-  </form>
+  </section>
 
   <style>
     .rating {

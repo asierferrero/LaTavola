@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container text-center py-5">
+    <h2 class="mb-4">Pago Completado</h2>
+    <div class="card p-4 shadow">
+        <p>¡Gracias por tu compra! Tu pedido ha sido confirmado.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary mt-4">Volver a la página principal</a>
+    </div>
+</div>
+{% endblock %}

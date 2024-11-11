@@ -21,16 +21,59 @@
     </table>
 
     <h4 class="mt-4">Helbidea</h4>
-    <form method="post" action="{% url 'order_confirmation' %}">
+    <form method="post" action="{% url 'payment' %}">
       {% csrf_token %}
-      <div class="mb-3">
-        <label for="address" class="form-label">Helbidea</label>
-        <input type="text" class="form-control" id="address" name="address" required>
+      <div class="mb-3 d-flex">
+        <input type="text" class="form-control" id="address" name="address" placeholder="Helbidea" required>
+        <button type="button" class="btn btn-outline-secondary ms-2" onclick="getLocation()">📍</button>
       </div>
       <div class="text-center mt-4">
         <button type="submit" class="btn btn-danger btn-lg">Eskaera Konfirmatu</button>
       </div>
-    </form>
+    </form>    
   </div>
 </div>
+
+<script>
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+      alert("Geolokalizazioa ez da onartzen zure arakatzailean.");
+    }
+  }
+
+  function showPosition(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const geolocationAPI = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+
+    fetch(geolocationAPI)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("address").value = data.display_name;
+      })
+      .catch(error => {
+        alert("Errore bat gertatu da kokapena eskuratzean.");
+        console.error("Error fetching address:", error);
+      });
+  }
+
+  function showError(error) {
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+        alert("Kokapena lortzeko baimena ukatu da.");
+        break;
+      case error.POSITION_UNAVAILABLE:
+        alert("Kokapena ezin da eskuratu.");
+        break;
+      case error.TIMEOUT:
+        alert("Kokapena lortzeko denbora amaitu da.");
+        break;
+      default:
+        alert("Errore ezezaguna.");
+        break;
+    }
+  }
+</script>
 {% endblock %}

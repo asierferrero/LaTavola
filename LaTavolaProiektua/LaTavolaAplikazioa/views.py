@@ -7,8 +7,9 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse, Http404
+import urllib
 from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm,ChangePasswordForm, IritziaForm
-from .models import Produktua, Alergeno, T2Product
+from .models import Produktua, Alergeno, T2Product, Iritzia
 from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
 from .import consume
 import requests
@@ -16,6 +17,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -422,3 +426,53 @@ def iritzia_sartu(request):
 def order_confirmation(request):
     user_profile = request.user
     return render(request, 'order_confirmation.html', {'user_profile': user_profile})
+
+
+@login_required
+def admin_iritziak_list(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    query = request.GET.get('q')  # Gets the search input
+    if query:
+        # Filters the name based on the input
+        iritzia_list = Iritzia.objects.filter(
+            Q(izena__icontains=query)
+        )
+    else:
+        # If no query, display all items
+        iritzia_list = Iritzia.objects.all()
+    
+    return render(request, 'iritzia_zerrenda.html', {'iritzia_list': iritzia_list})
+
+
+@login_required
+def iritziak_delete(request, id):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    iritziak = get_object_or_404(Iritzia, id=id) 
+
+    if request.method == "POST":
+        iritziak.delete() 
+        return redirect('iritziak-list') 
+
+def paypal_redirect(request):
+    paypal_url = 'https://www.paypal.com/cgi-bin/webscr'
+    paypal_data = {
+        'cmd': '_xclick',
+        'business': 'pjulen.muni@gmail.com',  
+        'amount': '01.00', 
+        'currency_code': 'EUR',  
+        'item_name': 'Tu Pedido',
+        'return': 'http://localhost:8000/payment_done/',
+        'cancel_return': 'http://localhost:8000/payment_cancel/',
+    }
+    
+    return redirect(f'{paypal_url}?{urllib.parse.urlencode(paypal_data)}')
+
+def payment_complete(request):
+    return render(request, 'payment_complete.html')
+
+def payment_cancel(request):
+    return render(request, 'payment_cancel.html')
