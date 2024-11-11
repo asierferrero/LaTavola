@@ -24,41 +24,17 @@
   <!-- Incluir Chart.js desde CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <!-- Incluir el archivo JS con el gráfico -->
+  <script src="{% static 'js/grafikoak.js' %}"></script>
+
   <script>
-    // Usamos los datos que se pasan desde la vista para el gráfico
+    // Pasamos las variables directamente desde Django a JavaScript
     const nombres = {{ nombres|safe }};
     const stock = {{ stock|safe }};
     const precios = {{ precios|safe }};
     
-    const ctx = document.getElementById('graficoProductos').getContext('2d');
-    
-    const graficoProductos = new Chart(ctx, {
-      type: 'bar', // Tipo de gráfico (barras)
-      data: {
-        labels: nombres, // Etiquetas para cada barra (nombres de los productos)
-        datasets: [{
-          label: 'Produktuen Stocka',
-          data: stock, // Valores de stock
-          backgroundColor: 'rgba(75, 192, 192, 0.5)', // Color de las barras de stock
-          borderColor: 'rgba(75, 192, 192, 1)', // Color de los bordes de las barras
-          borderWidth: 1
-        }, {
-          label: 'Produktuen prezioak',
-          data: precios, // Valores de precios
-          backgroundColor: 'rgba(255, 99, 132, 0.5)', // Color de las barras de precios
-          borderColor: 'rgba(255, 99, 132, 1)', // Color de los bordes de las barras
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true, // Hace que el gráfico sea responsivo
-        scales: {
-          y: {
-            beginAtZero: true // Hace que el eje Y empiece desde 0
-          }
-        }
-      }
-    });
+    // Llamamos a la función en grafikoak.js para crear el gráfico
+    produktuenGrafikoa(nombres, stock, precios);
   </script>
 
 {% endblock %}
