@@ -26,7 +26,7 @@ $(document).ready(function () {
             <div class="card" data-bs-toggle="modal" data-bs-target="#productModal-${index}">
               <img src="${item.img}" alt="${item.izena}" class="card-img-top rounded" />
               <div class="card-body text-center">
-                <h3 class="card-title">${item.izena}</h3>
+                <h3 class="card-title">${item.izena} ${item.adin_nagusikoa ? `- <img src="${staticUrl}img/18.png" style="width: 20px; height: auto;" title='Adin nagusikoa' />` : ''}</h3>
                 <p class="card-text">${item.deskripzioa}</p>
                 <h4 class="card-price">${item.prezioa}€</h4>
               </div>
