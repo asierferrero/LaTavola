@@ -51,7 +51,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- Ahora, incluir tu archivo gomendioak.js -->
-<script src="{% static 'js/gomendioak.js' %}"></script>
+<script src="{% static 'js/saskia.js' %}"></script>
 
 <style>
     .rating {
@@ -134,44 +134,4 @@
       text-align: right;
     }
 </style>
-
-<script>
-  function addToCart(productName, productPrice) {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingProductIndex = cart.findIndex(
-      (item) => item.name === productName
-    );
-
-    if (existingProductIndex > -1) {
-      cart[existingProductIndex].quantity += 1;
-    } else {
-      cart.push({ name: productName, price: productPrice, quantity: 1 });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    displayCartItems();
-  }
-
-  function removeFromCart(productName) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart = cart.filter((item) => item.name !== productName);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    displayCartItems();
-  }
-
-  function updateQuantity(productName, change) {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const product = cart.find((item) => item.name === productName);
-
-    if (product) {
-      product.quantity += change;
-      if (product.quantity <= 0) {
-        removeFromCart(productName);
-      } else {
-        localStorage.setItem("cart", JSON.stringify(cart));
-        displayCartItems();
-      }
-    }
-  }
-</script>
 {% endblock %}
