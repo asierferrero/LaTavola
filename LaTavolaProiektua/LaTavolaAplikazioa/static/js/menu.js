@@ -38,7 +38,7 @@ $(document).ready(function () {
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title">${item.izena}</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" aria-label="Close"><span class="text-white">X</span></button>
                 </div>
                 <div class="modal-body">
                   <div class="row">
