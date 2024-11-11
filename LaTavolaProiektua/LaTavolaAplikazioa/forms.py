@@ -126,7 +126,7 @@ class ProduktuaForm(forms.ModelForm):
         
 
 class AlergenoForm(forms.ModelForm):
-     class Meta:
+    class Meta:
         model = Alergeno
         fields = ['izena', 'img']
         
@@ -138,3 +138,12 @@ class IritziaForm(forms.ModelForm):
         widgets = {
             'testua': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
         }
+
+class verify_password_viewForm(forms.Form):
+    password = forms.CharField(
+        label='Pasahitza',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Sartu zure pasahitza',
+            'required': True
+        }))

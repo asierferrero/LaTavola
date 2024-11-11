@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse, Http404
 import urllib
-from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm,ChangePasswordForm, IritziaForm
+from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm,ChangePasswordForm, IritziaForm,verify_password_viewForm
 from .models import Produktua, Alergeno, T2Product, Iritzia
 from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
 from .import consume
@@ -167,15 +167,23 @@ def verify_view(request, id):
         return render(request, 'verify.html', {'success': 'Zure kontua egiaztatu da'})
     except Exception as e:
         return render(request, 'verify.html', {'error': 'Zure kontua ezin izan da egiaztatu'})
-    
-def verify_password_view(request,Email):
-    try:
-        user = User.objects.get(username=Email)
 
-        return render(request, 'verify_password.html', {'success': 'Zure pasahitza aldatu da'})
-    except Exception as e:
-        print(f"error:{e}")
-        return render(request, 'verify_password.html', {'error': 'Zure pasahitza ezin izan da aldatu'})
+
+def verify_password_view(request,Email):
+    user = User.objects.get(username=Email)
+        
+    if request.method == 'POST':
+        form = verify_password_viewForm(request.POST)
+        if form.is_valid():
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+
+            return render(request, 'password_changed.html', {'form': form, 'success': 'Zure pashitza aldatua izan da'})
+        else:
+            return render(request, 'password_changed.html', {'form': form, 'error': 'Zure pasahitza ezin izan da aldatu '})
+    else:
+        form = verify_password_viewForm()
+    return render(request, 'login.html', {'form': form})
 
 
 @login_required
