@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse, Http404
 from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm,ChangePasswordForm, IritziaForm
-from .models import Produktua, Alergeno, T2Product
+from .models import Produktua, Alergeno, T2Product, Iritzia
 from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
 from .import consume
 import requests
@@ -413,3 +413,34 @@ def iritzia_sartu(request):
 def order_confirmation(request):
     user_profile = request.user
     return render(request, 'order_confirmation.html', {'user_profile': user_profile})
+
+
+@login_required
+def admin_iritziak_list(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    query = request.GET.get('q')  # Gets the search input
+    if query:
+        # Filters the name based on the input
+        iritzia_list = Iritzia.objects.filter(
+            Q(izena__icontains=query)
+        )
+    else:
+        # If no query, display all items
+        iritzia_list = Iritzia.objects.all()
+    
+    return render(request, 'iritzia_zerrenda.html', {'iritzia_list': iritzia_list})
+
+
+@login_required
+def iritziak_delete(request, id):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    iritziak = get_object_or_404(Iritzia, id=id) 
+
+    if request.method == "POST":
+        iritziak.delete() 
+        return redirect('iritziak-list') 
+

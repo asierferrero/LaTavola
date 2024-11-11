@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h1 class="text-center text-primary">Iritzi Lista</h1>
+
+    <form method="GET" action="" class="form-inline mb-4">
+        <input type="text" name="q" placeholder="Sartu erabiltzailea" class="form-control mr-2" value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary">Bilatu</button>
+        <a href="{% url 'iritziak-list' %}" class="btn btn-secondary ml-2">Berrabiarazi</a>
+    </form>
+
+    <div class="text-center mt-4 mb-4">
+        <a href="{% url 'admin_home' %}"><button class="btn btn-danger">Atzera</button></a>
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Erabiltzailea</th>
+                <th>Izarrak</th>
+                <th>Data</th>
+                <th>Testua</th>
+                <th>Ekintzak</th> <!-- Added a column for actions (like delete) -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for iritzia in iritzia_list %}
+            <tr>
+                <td>{{ iritzia.erabiltzailea.username }}</td>  <!-- Show the username of the user -->
+                <td>{{ iritzia.izarrak }}</td>  <!-- Display star rating or number -->
+                <td>{{ iritzia.data|date:"Y-m-d H:i" }}</td>  <!-- Format the date -->
+                <td>{{ iritzia.testua }}</td>  <!-- Show the review text -->
+                <td>
+                    <!-- Delete button with confirmation -->
+                    <form method="POST" action="{% url 'iritziak-delete' iritzia.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Benetako borratu nahi duzula?');">
+                            <i class="bi bi-trash"></i> <!-- Bootstrap trash icon -->
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">Ez dago iritzirik.</td> <!-- No reviews message -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
