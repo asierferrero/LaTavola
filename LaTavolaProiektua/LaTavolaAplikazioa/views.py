@@ -1,3 +1,4 @@
+from urllib.parse import urlencode
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.mail import send_mail
@@ -8,7 +9,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse, Http404
 import urllib
-from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm,ChangePasswordForm, IritziaForm,verify_password_viewForm
+from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm, ChangePasswordForm, IritziaForm, verify_password_viewForm
 from .models import Produktua, Alergeno, T2Product, Iritzia
 from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
 from .import consume
@@ -17,7 +18,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
 from django.urls import reverse
 
@@ -27,19 +27,20 @@ User = get_user_model()
 def main(request):
     return render(request, 'home.html', {})
 
+
 @login_required
 def admin_home_view(request):
     if not request.user.is_staff:
         return redirect('home')
-    
+
     user_profile = request.user  # Obtener el perfil del usuario
-    
+
     # Obtener los datos necesarios para el gráfico
     productos = Produktua.objects.all()
     nombres = [producto.izena for producto in productos]
     stock = [producto.stock for producto in productos]
     precios = [float(producto.prezioa) for producto in productos]
-    
+
     return render(request, 'admin_home.html', {
         'user_profile': user_profile,
         'nombres': nombres,
@@ -47,11 +48,12 @@ def admin_home_view(request):
         'precios': precios,
     })
 
+
 @login_required
 def admin_bezeroak_list(request):
     if not request.user.is_staff:
         return redirect('home')
-    
+
     query = request.GET.get('q')
     if query:
         bezero_list = User.objects.filter(
@@ -61,11 +63,12 @@ def admin_bezeroak_list(request):
         bezero_list = User.objects.all()
     return render(request, 'bezero_zerrenda.html', {'bezero_list': bezero_list})
 
+
 @login_required
 def admin_produktuak_list(request):
     if not request.user.is_staff:
         return redirect('home')
-    
+
     query = request.GET.get('q')  # Obtiene el name del input
     if query:
         # Filtra el nombre segun el input metido
@@ -75,7 +78,7 @@ def admin_produktuak_list(request):
     else:
         # Si no lo encuentra aparece toda la lista
         produktu_list = Produktua.objects.all()
-    
+
     return render(request, 'produktu_zerrenda.html', {'produktu_list': produktu_list})
 
 
@@ -99,6 +102,7 @@ def login_view(request):
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
+
 def pasahitza_aldatu_view(request):
     if request.method == 'POST':
         form = ChangePasswordForm(request.POST)
@@ -110,19 +114,21 @@ def pasahitza_aldatu_view(request):
             return render(request, 'password_changed.html', {'form': form, 'error': 'Ezin izan da zure pasahitza aldatzeko mezu elektroniko bat bidali'})
     else:
         form = ChangePasswordForm()
-    return render(request,'login.html',{'form': form})
+    return render(request, 'login.html', {'form': form})
 
 
 def send_password_email(Email):
-    try:       
-        
-        verification_url = f"{settings.SITE_URL}/verify_password/{Email}/"#hay que cambiar el user id
+    try:
+
+        # hay que cambiar el user id
+        verification_url = f"{settings.SITE_URL}/verify_password/{Email}/"
         subject = "Aldatu ezazu pasahitza"
         message = f"Egin klik esteka honetan zure pasahitza aldatzeko: {
             verification_url}"
         send_mail(subject, message, settings.EMAIL_HOST_USER, [Email])
     except Exception as e:
         print(f"Errorea emaila bidaltzerakoan: {e}")
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -169,9 +175,9 @@ def verify_view(request, id):
         return render(request, 'verify.html', {'error': 'Zure kontua ezin izan da egiaztatu'})
 
 
-def verify_password_view(request,Email):
+def verify_password_view(request, Email):
     user = User.objects.get(username=Email)
-        
+
     if request.method == 'POST':
         form = verify_password_viewForm(request.POST)
         if form.is_valid():
@@ -207,70 +213,74 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
-  
+
 def saskia(request):
     return render(request, 'saskia.html', {})
-  
+
 
 @login_required
 def produktua_new(request):
     if not request.user.is_staff:
         return redirect('home')
-    
+
     if request.method == 'POST':
-        form = ProduktuaForm(request.POST, request.FILES) 
+        form = ProduktuaForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()  
+            form.save()
             return redirect('produktuak-list')
     else:
         form = ProduktuaForm()
-    
+
     return render(request, 'produktua_new.html', {'form': form})
+
 
 @login_required
 def produktuak_delete(request, id):
-    
+
     if not request.user.is_staff:
         return redirect('home')
-    
+
     produktuak = get_object_or_404(Produktua, id=id)
-    
+
     if produktuak.img:
-        produktuak.img.delete(save=False) 
-        
+        produktuak.img.delete(save=False)
+
     if request.method == "POST":
         produktuak.delete()
         return redirect('produktuak-list')
-    
+
+
 @login_required
 def produktuak_edit(request, id):
     if not request.user.is_staff:
         return redirect('home')
-    
+
     produktuak = get_object_or_404(Produktua, id=id)
-    
+
     if request.method == "POST":
         form = ProduktuaForm(request.POST, request.FILES, instance=produktuak)
         if form.is_valid():
             form.save()
-            return redirect('produktuak-list')  # Redirigir a la lista de productos
+            # Redirigir a la lista de productos
+            return redirect('produktuak-list')
     else:
         form = ProduktuaForm(instance=produktuak)
-    
+
     return render(request, 'produktua_new.html', {'form': form, 'produktuak': produktuak})
+
 
 @login_required
 def bezeroak_delete(request, id):
-    
+
     if not request.user.is_staff:
         return redirect('home')
-    
+
     bezeroak = get_object_or_404(User, id=id)
-    
+
     if request.method == "POST":
         bezeroak.delete()
         return redirect('bezeroak-list')
-    
+
 
 @login_required
 def bezero_edit(request, id):
@@ -281,17 +291,18 @@ def bezero_edit(request, id):
 
     if request.method == "POST":
         is_staff = request.POST.get('is_staff') == 'on'
-        user.is_staff = is_staff 
+        user.is_staff = is_staff
         user.save()
         return redirect('bezeroak-list')
 
     return render(request, 'bezero_edit.html', {'user': user})
 
+
 @login_required
 def admin_alergenoak_list(request):
     if not request.user.is_staff:
         return redirect('home')
-    
+
     query = request.GET.get('q')
     if query:
         alergenoak_list = Alergeno.objects.filter(
@@ -304,33 +315,33 @@ def admin_alergenoak_list(request):
 
 @login_required
 def alergenoak_delete(request, id):
-    
+
     if not request.user.is_staff:
         return redirect('home')
-    
+
     alergenoak = get_object_or_404(Alergeno, id=id)
-    
+
     if alergenoak.img:
-        alergenoak.img.delete(save=False) 
-        
+        alergenoak.img.delete(save=False)
+
     if request.method == "POST":
         alergenoak.delete()
         return redirect('alergeno-list')
-    
+
 
 @login_required
 def alergenoa_new(request):
     if not request.user.is_staff:
         return redirect('home')
-    
+
     if request.method == 'POST':
-        form = AlergenoForm(request.POST, request.FILES) 
+        form = AlergenoForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()  
+            form.save()
             return redirect('alergeno-list')
     else:
         form = AlergenoForm()
-    
+
     return render(request, 'alergenoa_new.html', {'form': form})
 
 
@@ -338,23 +349,25 @@ def alergenoa_new(request):
 def alergenoak_edit(request, id):
     if not request.user.is_staff:
         return redirect('home')
-    
+
     alergenoak = get_object_or_404(Alergeno, id=id)
-    
+
     if request.method == "POST":
         form = AlergenoForm(request.POST, request.FILES, instance=alergenoak)
         if form.is_valid():
             form.save()
-            return redirect('alergeno-list')  # Redirigir a la lista de productos
+            # Redirigir a la lista de productos
+            return redirect('alergeno-list')
     else:
         form = AlergenoForm(instance=alergenoak)
-    
+
     return render(request, 'alergenoa_new.html', {'form': form, 'produktuak': alergenoak})
 
 
 class Produktuak_APIView(APIView):
     def get(self, request, format=None, *args, **kwargs):
-        produktuak = Produktua.objects.prefetch_related('alergenoak').all()  # Produktuak bakoitzaren alergenoekin erlazionatu
+        # Produktuak bakoitzaren alergenoekin erlazionatu
+        produktuak = Produktua.objects.prefetch_related('alergenoak').all()
         serializer = ProduktuakSerializers(produktuak, many=True)
         return Response(serializer.data)
 
@@ -392,7 +405,7 @@ class Produktuak_APIView_Detail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-#TODO terminar las funciones para consumir el REST API cuando el grupo de Alberdi tenga terminado el API
+# TODO terminar las funciones para consumir el REST API cuando el grupo de Alberdi tenga terminado el API
 class T2Consume_API(APIView):
     def get(self, request, format=None, *args, **kwargs):
         produktuak = requests.get('http://192.168.73.26:8000/v1/product')
@@ -408,7 +421,7 @@ class T2Consume_API(APIView):
 
 
 class T2Consume_APIView_Detail(APIView):
-    def get_object(self, pk,request):
+    def get_object(self, pk, request):
         try:
             return T2Product.objects.get(pk=pk)
         except Produktua.DoesNotExist:
@@ -420,27 +433,27 @@ def iritzia_sartu(request):
     if request.method == 'POST':
         form = IritziaForm(request.POST)
         if form.is_valid():
-            opinion = form.save(commit=False)  
-            opinion.erabiltzailea = request.user     
-            opinion.save()                     
+            opinion = form.save(commit=False)
+            opinion.erabiltzailea = request.user
+            opinion.save()
             return redirect('home')
     else:
         form = IritziaForm()
-    
+
     return render(request, 'iritzia_sartu.html', {'form': form})
-        
+
 
 @login_required
-def order_confirmation(request):
+def erosketa(request):
     user_profile = request.user
-    return render(request, 'order_confirmation.html', {'user_profile': user_profile})
+    return render(request, 'erosketa.html', {'user_profile': user_profile})
 
 
 @login_required
 def admin_iritziak_list(request):
     if not request.user.is_staff:
         return redirect('home')
-    
+
     query = request.GET.get('q')  # Gets the search input
     if query:
         # Filters the name based on the input
@@ -450,7 +463,7 @@ def admin_iritziak_list(request):
     else:
         # If no query, display all items
         iritzia_list = Iritzia.objects.all()
-    
+
     return render(request, 'iritzia_zerrenda.html', {'iritzia_list': iritzia_list})
 
 
@@ -458,29 +471,40 @@ def admin_iritziak_list(request):
 def iritziak_delete(request, id):
     if not request.user.is_staff:
         return redirect('home')
-    
-    iritziak = get_object_or_404(Iritzia, id=id) 
+
+    iritziak = get_object_or_404(Iritzia, id=id)
 
     if request.method == "POST":
-        iritziak.delete() 
-        return redirect('iritziak-list') 
+        iritziak.delete()
+        return redirect('iritziak-list')
 
-def paypal_redirect(request):
+
+def ordainketa(request):
+    try:
+        total = float(request.POST.get('total', '0.00'))
+    except ValueError:
+        total = 0.00
+
     paypal_url = 'https://www.paypal.com/cgi-bin/webscr'
     paypal_data = {
         'cmd': '_xclick',
-        'business': 'pjulen.muni@gmail.com',  
-        'amount': '01.00', 
-        'currency_code': 'EUR',  
+        'business': 'pjulen.muni@gmail.com',
+        'amount': f"{total:.2f}",
+        'currency_code': 'EUR',
         'item_name': 'Tu Pedido',
-        'return': 'http://localhost:8000/payment_done/',
-        'cancel_return': 'http://localhost:8000/payment_cancel/',
+        'return': 'http://localhost:8000/ordainketa/zuzena/',
+        'cancel_return': 'http://localhost:8000/ordainketa/ezeztatua/',
     }
-    
-    return redirect(f'{paypal_url}?{urllib.parse.urlencode(paypal_data)}')
 
-def payment_complete(request):
-    return render(request, 'payment_complete.html')
+    redirect_url = f"{paypal_url}?{urlencode(paypal_data)}"
+    return redirect(redirect_url)
 
-def payment_cancel(request):
-    return render(request, 'payment_cancel.html')
+
+def ordainketa_zuzena(request):
+    return render(request, 'ordainketa_zuzena.html')
+
+
+def ordainketa_ezeztatua(request):
+    return render(request, 'ordainketa_zuzena.html') 
+
+

@@ -22,7 +22,7 @@ $(document).ready(function () {
                 </div>
                 <div class="recommended-text">
                     <h4>${item.izena}</h4>
-                    <button class="btn btn-danger" onclick="addToCart('${item.izena}', ${item.prezioa})">Eskatu</button>
+                    <button class="btn btn-danger" onclick="addToCart('${item.id}', '${item.izena}', ${item.prezioa})">Eskatu</button>
                 </div>
             </div>
         `);
@@ -34,37 +34,37 @@ $(document).ready(function () {
   });
 });
 
-function addToCart(productName, productPrice) {
+function addToCart(id, izena, prezioa) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const existingProductIndex = cart.findIndex(
-    (item) => item.name === productName
+    (item) => item.name === izena
   );
 
   if (existingProductIndex > -1) {
     cart[existingProductIndex].quantity += 1;
   } else {
-    cart.push({ name: productName, price: productPrice, quantity: 1 });
+    cart.push({ id: id, name: izena, price: prezioa, quantity: 1 });
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
   displayCartItems();
 }
 
-function removeFromCart(productName) {
+function removeFromCart(izena) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart = cart.filter((item) => item.name !== productName);
+  cart = cart.filter((item) => item.name !== izena);
   localStorage.setItem("cart", JSON.stringify(cart));
   displayCartItems();
 }
 
-function updateQuantity(productName, change) {
+function updateQuantity(izena, change) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const product = cart.find((item) => item.name === productName);
+  const product = cart.find((item) => item.name === izena);
 
   if (product) {
     product.quantity += change;
     if (product.quantity <= 0) {
-      removeFromCart(productName);
+      removeFromCart(izena);
     } else {
       localStorage.setItem("cart", JSON.stringify(cart));
       displayCartItems();
@@ -115,12 +115,6 @@ function displayCartItems() {
   });
 
   totalPriceElement.innerHTML = `${total.toFixed(2)}€`;
-}
-
-function comprar() {
-  localStorage.removeItem("cart");
-  displayCartItems();
-  window.location.href = "{% url 'order_confirmation' %}"; 
 }
 
 document.addEventListener("DOMContentLoaded", displayCartItems);

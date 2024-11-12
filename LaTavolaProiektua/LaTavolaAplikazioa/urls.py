@@ -23,13 +23,11 @@ urlpatterns = [
     path('admin-home/iritziak-list/', views.admin_iritziak_list , name='iritziak-list'),
     path('admin-home/iritziak/delete/<int:id>/', views.iritziak_delete, name='iritziak-delete'),
     
-    
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
     path('pasahitza_aldatu/', views.pasahitza_aldatu_view, name='pasahitza_aldatu'),
     path('profile/', views.profile_view, name='profile'),
     path('logout/', views.logout_view, name='logout'),
-    path('saskia/', views.saskia, name='saskia'),
     path('iritzia/', views.iritzia_sartu, name='iritzia_sartu'),
     
     path('verify/<int:id>/', views.verify_view, name='verify'),
@@ -39,10 +37,11 @@ urlpatterns = [
     path('api/produktuak/<int:pk>/', views.Produktuak_APIView_Detail.as_view()),
     path('api/contsumituT2/', views.T2Consume_API.as_view()),
     
-    path('order/confirmation/', views.order_confirmation, name='order_confirmation'),
+    path('saskia/', views.saskia, name='saskia'),
+    path('erosketa/', views.erosketa, name='erosketa'),
+    path('ordainketa/', views.ordainketa, name='ordainketa'),
+    path('ordainketa/zuzena/', views.ordainketa_zuzena, name='ordainketa_zuzena'),
+    path('ordainketa/ezeztatua/', views.ordainketa_ezeztatua, name='ordainketa_ezeztatua'),
+    
     path('paypal/', include('paypal.standard.ipn.urls')),
-    path('payment/', views.paypal_redirect, name='paypal-redirect'),
-    path('pago/', views.paypal_redirect, name='payment'),
-    path('payment_done/', views.payment_complete, name='payment_done'),
-    path('payment_cancel/', views.payment_cancel, name='payment_cancel'),
 ]

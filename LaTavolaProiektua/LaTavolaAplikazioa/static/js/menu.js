@@ -3,30 +3,49 @@ $(document).ready(function () {
     url: "/api/produktuak/",
     method: "GET",
     success: function (data) {
-      const ordena = ["Hasierakoa", "Lehena", "Bigarrena", "Gehigarria", "Postrea", "Kafea"];
+      const ordena = [
+        "Hasierakoa",
+        "Lehena",
+        "Bigarrena",
+        "Gehigarria",
+        "Postrea",
+        "Kafea",
+      ];
       data.sort((a, b) => ordena.indexOf(a.mota) - ordena.indexOf(b.mota));
 
       let currentCategory = "";
       data.forEach(function (item, index) {
         if (item.mota !== currentCategory) {
           currentCategory = item.mota;
-          if (currentCategory === 'Kafea') {
-            $("#menu-items").append(`<div class="col-12 category-title ${currentCategory}"><h2>${currentCategory}k eta edatekoak</h2></div>`);
+          if (currentCategory === "Kafea") {
+            $("#menu-items").append(
+              `<div class="col-12 category-title ${currentCategory}"><h2>${currentCategory}k eta edatekoak</h2></div>`
+            );
           } else {
-            $("#menu-items").append(`<div class="col-12 category-title ${currentCategory}"><h2>${currentCategory}k</h2></div>`);
+            $("#menu-items").append(
+              `<div class="col-12 category-title ${currentCategory}"><h2>${currentCategory}k</h2></div>`
+            );
           }
         }
 
-        let alergenoak = item.alergenoak.map(alergeno => `
+        let alergenoak = item.alergenoak
+          .map(
+            (alergeno) => `
           <img src="${alergeno.img}" style="width: 30px; height: 30px; margin-right: 5px" title="${alergeno.izena}" />
-        `).join("");
+        `
+          )
+          .join("");
 
         $("#menu-items").append(`
           <div class="col-12 col-md-3 menu-item ${item.mota}">
             <div class="card" data-bs-toggle="modal" data-bs-target="#productModal-${index}">
-              <img src="${item.img}" alt="${item.izena}" class="card-img-top rounded" />
+              <img src="${
+                item.img
+              }" alt="${item.izena}" class="card-img-top rounded" />
               <div class="card-body text-center">
-                <h3 class="card-title">${item.izena} ${item.adin_nagusikoa ? `- <img src="${staticUrl}img/18.png" style="width: 20px; height: auto;" title='Adin nagusikoa' />` : ''}</h3>
+                <h3 class="card-title">${
+                  item.izena
+                } ${item.adin_nagusikoa ? `- <img src="${staticUrl}img/18.png" style="width: 20px; height: auto;" title='Adin nagusikoa' />` : ""}</h3>
                 <p class="card-text">${item.deskripzioa}</p>
                 <h4 class="card-price">${item.prezioa}€</h4>
               </div>
@@ -43,7 +62,9 @@ $(document).ready(function () {
                 <div class="modal-body">
                   <div class="row">
                     <div class="col-md-5">
-                      <img src="${item.img}" class="img-fluid rounded" alt="${item.izena}" />
+                      <img src="${
+                        item.img
+                      }" class="img-fluid rounded" alt="${item.izena}" />
                     </div>
                     <div class="col-md-7">
                       <p>${item.deskripzioa}</p>
@@ -108,8 +129,11 @@ $(document).ready(function () {
   function addToCart(id, izena, prezioa, quantity) {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingProductIndex = cart.findIndex((item) => item.id === id);
-    if (existingProductIndex > -1) cart[existingProductIndex].quantity += quantity;
-    else cart.push({ id: id, name: izena, price: prezioa, quantity: quantity });
+    if (existingProductIndex > -1) {
+      cart[existingProductIndex].quantity += quantity;
+    } else {
+      cart.push({ id: id, name: izena, price: prezioa, quantity: quantity });
+    }
     localStorage.setItem("cart", JSON.stringify(cart));
     $("#notification").stop().fadeIn(300).delay(1000).fadeOut(300);
   }
