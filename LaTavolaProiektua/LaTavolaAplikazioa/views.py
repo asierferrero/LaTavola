@@ -526,6 +526,9 @@ def ordainketa(request):
         total = float(request.POST.get('total', '0.00'))
     except ValueError:
         total = 0.00
+    
+    request.session['cart_total'] = total
+    request.session['cart_items'] = request.POST.get('cart_items', [])
 
     paypal_url = 'https://www.paypal.com/cgi-bin/webscr'
     paypal_data = {
@@ -533,7 +536,7 @@ def ordainketa(request):
         'business': 'pjulen.muni@gmail.com',
         'amount': f"{total:.2f}",
         'currency_code': 'EUR',
-        'item_name': 'Tu Pedido',
+        'item_name': 'Zure Eskaria',
         'return': 'http://localhost:8000/ordainketa/zuzena/',
         'cancel_return': 'http://localhost:8000/ordainketa/ezeztatua/',
     }
@@ -541,12 +544,13 @@ def ordainketa(request):
     redirect_url = f"{paypal_url}?{urlencode(paypal_data)}"
     return redirect(redirect_url)
 
-
 def ordainketa_zuzena(request):
-    return render(request, 'ordainketa_zuzena.html')
+    cart_items = request.session.get('cart_items', [])
+    cart_total = request.session.get('cart_total', 0.00)
+    return render(request, 'ordainketa_zuzena.html', {'cart_items': cart_items, 'cart_total': cart_total})
 
 
 def ordainketa_ezeztatua(request):
-    return render(request, 'ordainketa_zuzena.html') 
+    return render(request, 'ordainketa_ezeztatua.html') 
 
 
