@@ -35,6 +35,8 @@ urlpatterns = [
     
     path('api/produktuak/', views.Produktuak_APIView.as_view()),
     path('api/produktuak/<int:pk>/', views.Produktuak_APIView_Detail.as_view()),
+    path('api/Eskariak/', views.Eskariak_APIView.as_view()),
+    path('api/Eskariak/<int:pk>/', views.Eskariak_APIView_Detail.as_view()),
     path('api/contsumituT2/', views.T2Consume_API.as_view()),
     
     path('saskia/', views.saskia, name='saskia'),
