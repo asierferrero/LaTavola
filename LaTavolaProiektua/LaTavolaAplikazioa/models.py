@@ -86,12 +86,10 @@ class Iritzia(models.Model):
 
 #TODO preguntar modelo BBDD del grupo de alberdi y terminar el MODELO
 class T2Product(models.Model):
-    product_id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=75)
     description = models.TextField()
-    stock = models.IntegerField()
-    vegan = models.BooleanField()
-    celiac = models.BooleanField()
-    calories = models.IntegerField()
-    valoration_avg = models.FloatField()
+    ingredients = models.CharField(max_length=75)
     price = models.FloatField()
+    foto = models.CharField(max_length=75)
+    category_id = models.IntegerField()
