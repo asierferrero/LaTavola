@@ -10,8 +10,8 @@ from django.db.models import Q
 from django.http import JsonResponse, Http404
 import urllib
 from .forms import RegisterForm, LoginForm, ProfileForm, ProduktuaForm, AlergenoForm, ChangePasswordForm, IritziaForm, verify_password_viewForm
-from .models import Produktua, Alergeno, T2Product, Iritzia
-from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer
+from .models import Produktua, Alergeno, T2Product, Iritzia,Eskaria
+from .serializers import ProduktuakSerializers, T2ProduktuakSerializer, T2AlergenoSerializer, EskariaSerializer
 from .import consume
 import requests
 from rest_framework.response import Response
@@ -394,6 +394,48 @@ class Produktuak_APIView_Detail(APIView):
     def put(self, request, pk, format=None):
         produktua = self.get_object(pk)
         serializer = ProduktuakSerializers(produktua, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        produktua = self.get_object(pk)
+        produktua.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class Eskariak_APIView(APIView):
+    def get(self, request, format=None, *args, **kwargs):
+        # Produktuak bakoitzaren alergenoekin erlazionatu
+        produktuak = Eskaria.objects.prefetch_related('erabiltzailea').all()
+        produktuak = Eskaria.objects.prefetch_related('produktua').all()
+        produktuak = Eskaria.objects.prefetch_related('langilea').all()
+        serializer = ProduktuakSerializers(produktuak, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = ProduktuakSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
+class Eskariak_APIView_Detail(APIView):
+    def get_object(self, pk):
+        try:
+            return Eskaria.objects.get(pk=pk)
+        except Produktua.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        Eskaria = self.get_object(pk)
+        serializer = EskariaSerializer(Eskaria)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        produktua = self.get_object(pk)
+        serializer = EskariaSerializer(produktua, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
