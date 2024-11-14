@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %} 
+
+<div class="container mt-4">
+    <h1 class="text-center text-primary">Eskari Lista</h1>
+    <form method="GET" action="" class="form-inline mb-4">
+        <input type="text" name="q" placeholder="Sartu produktuaren izena" class="form-control mr-2" value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary">Bilatu</button>
+        <a href="{% url 'eskariak-list' %}" class="btn btn-secondary ml-2">Berrabiarazi</a>
+    </form>
+    <div class="text-center mt-4 mb-4">
+    <a href="{% url 'admin_home' %}"><button class="btn btn-danger">Atzera</button></a>
+    </div>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Banatzailea</th>
+                <th>erabiltzailea</th>
+                <th>langilea</th>
+                <th>Produktua</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eskariak in eskaria_list %}
+            <tr>
+                <td>{{ eskariak.banatzailea }}</td>
+                <td>{{ eskariak.erabiltzailea }}</td>
+                <td>{{ eskariak.langilea }}</td>
+                <td>{{ eskariak.produktua }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

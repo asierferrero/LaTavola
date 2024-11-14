@@ -23,6 +23,8 @@ urlpatterns = [
     path('admin-home/iritziak-list/', views.admin_iritziak_list , name='iritziak-list'),
     path('admin-home/iritziak/delete/<int:id>/', views.iritziak_delete, name='iritziak-delete'),
     
+    path('admin-home/eskariak-list/', views.admin_eskariak_list , name='eskariak-list'),
+    
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
     path('pasahitza_aldatu/', views.pasahitza_aldatu_view, name='pasahitza_aldatu'),

@@ -123,8 +123,7 @@ def send_password_email(Email):
         # hay que cambiar el user id
         verification_url = f"{settings.SITE_URL}/verify_password/{Email}/"
         subject = "Aldatu ezazu pasahitza"
-        message = f"Egin klik esteka honetan zure pasahitza aldatzeko: {
-            verification_url}"
+        message = f"Egin klik esteka honetan zure pasahitza aldatzeko: {verification_url}"
         send_mail(subject, message, settings.EMAIL_HOST_USER, [Email])
     except Exception as e:
         print(f"Errorea emaila bidaltzerakoan: {e}")
@@ -155,8 +154,7 @@ def send_verification_email(user):
     try:
         verification_url = f"{settings.SITE_URL}/verify/{user.id}/"
         subject = "Zure kontua egiaztatu"
-        message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {
-            verification_url}"
+        message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {verification_url}"
         send_mail(subject, message, settings.EMAIL_HOST_USER, [user.username])
     except Exception as e:
         print(f"Errorea emaila bidaltzerakoan: {e}")
@@ -553,4 +551,21 @@ def ordainketa_zuzena(request):
 def ordainketa_ezeztatua(request):
     return render(request, 'ordainketa_ezeztatua.html') 
 
+
+@login_required
+def admin_eskariak_list(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    query = request.GET.get('q')  # Obtiene el name del input
+    if query:
+        # Filtra el nombre segun el input metido
+        eskaria_list = Eskaria.objects.filter(
+            Q(produktua__icontains=query)
+        )
+    else:
+        # Si no lo encuentra aparece toda la lista
+        eskaria_list = Eskaria.objects.all()
+
+    return render(request, 'eskari_zerrenda.html', {'eskari_list': eskaria_list})
 
