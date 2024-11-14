@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
+  <script src="{% static 'js/menu.js' %}"></script>
+  <script src="{% static 'js/carousel.js' %}"></script>
+  <script type="text/javascript">
+    var staticUrl = "{% static '' %}"
+  </script>
+
+  <div class="hero-image">
+    <!-- Argazkia -->
+  </div>
+  <section class="hero py-5">
+    <div class="container">
+      <div class="carousel slide" id="aldatu" data-bs-ride="carousel">
+        <div class="carousel-inner" id="carouselItems">
+          <!-- Karruseleko argazkiak -->
+        </div>
+        <a class="carousel-control-prev" href="#aldatu" role="button" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span></a>
+        <a class="carousel-control-next" href="#aldatu" role="button" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu" class="menu py-5 mx-5">
+    <div class="container-fluid">
+      <h2 class="display-4"><center>La Tavola - Menua</center></h2>
+      <div id="filter-buttons" class="text-center mb-4">
+        <button class="btn btn-secondary filter-button" data-filter="all">Guztiak</button>
+        <button class="btn btn-secondary filter-button" data-filter="Hasierakoa">Hasierakoak</button>
+        <button class="btn btn-secondary filter-button" data-filter="Lehena">Lehenak</button>
+        <button class="btn btn-secondary filter-button" data-filter="Bigarrena">Bigarrenak</button>
+        <button class="btn btn-secondary filter-button" data-filter="Gehigarria">Gehigarriak</button>
+        <button class="btn btn-secondary filter-button" data-filter="Postrea">Postreak</button>
+        <button class="btn btn-secondary filter-button" data-filter="Kafea">Kafeak eta edatekoak</button>
+      </div>
+      
+      <div class="row mt-4" id="menu-items">
+        <!-- AJAX -->
+      </div>
+    </div>
+  </section>
+
+  <div id="notification" style="
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050; /* Ajustado para estar sobre el modal */
+    background-color: #4caf50;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    transition: opacity 0.3s ease;
+    text-align: center;">Produktua saskira gehituta</div>
+{% endblock %}

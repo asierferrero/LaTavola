@@ -1,2 +1,2 @@
 # LaTavola
-Jatetxe italiar (gourmet) batentzako etxez-etxeko janari zerbitzua eskaintzeko web orria. 
+Jatetxe italiar (gourmet) batentzako etxez-etxeko janari zerbitzua eskaintzeko web orria..
