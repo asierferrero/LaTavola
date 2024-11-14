@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
 <div class="container d-flex justify-content-center align-items-start vh-100">
     <div class="row w-100">
-        <!-- Columna para el formulario -->
         <div class="col-md-6">
-            <h2 class="text-center">Utzi zure iritzia gure zerbitzuari buruz</h2>
+            <h2 class="text-center">Utzi zure iritzia</h2>
             <form method="post" class="p-4 border rounded bg-light shadow-sm">
                 {% csrf_token %}
                 
@@ -39,7 +38,6 @@
             </form>
         </div>
 
-        <!-- Columna para Gomendioak -->
         <div class="col-md-6" id="gomendioak">
             <h2 class="text-center">Gomendatutako Platerrak</h2>
             <!-- AJAX -->
@@ -47,10 +45,8 @@
     </div>
 </div>
 
-<!-- Incluyendo jQuery desde un CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Ahora, incluir tu archivo gomendioak.js -->
 <script src="{% static 'js/saskia.js' %}"></script>
 
 <style>
@@ -130,7 +126,7 @@
     }
     .price {
       font-weight: bold;
-      width: 60px; /* Ajusta el ancho según sea necesario */
+      width: 60px;
       text-align: right;
     }
 </style>

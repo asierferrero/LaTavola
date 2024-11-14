@@ -11,8 +11,8 @@ $(document).ready(function () {
         return array;
       }
 
-      // Produktuak nahastu eta lehenengo 3 aukeratu
-      const randomItems = shuffle(data).slice(0, 3);
+      // Produktuak nahastu eta lehenengo 4 aukeratu
+      const randomItems = shuffle(data).slice(0, 4);
 
       randomItems.forEach(function (item) {
         $("#gomendioak").append(`
