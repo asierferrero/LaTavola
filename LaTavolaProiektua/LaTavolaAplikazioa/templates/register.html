@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+  <section class="login-section py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card p-4 shadow">
+            {% if success %}
+              <p style="color: green">{{ success }}</p>
+            {% else %}
+              <h2 class="text-center mb-4">Erregistratu</h2>
+              <form method="POST" class="post-form needs-validation">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-danger btn-block">Erregistratu</button><br />
+                <a class="text-danger" href="{% url 'login' %}">Kontua badaukazu? Saioa hasi</a>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

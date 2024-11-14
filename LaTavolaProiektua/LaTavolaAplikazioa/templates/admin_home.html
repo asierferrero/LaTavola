@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %} 
+
+  {% csrf_token %}
+  
+  <h1 class="text-center">Kaixo: {{ user_profile.username }}</h1>
+
+  <div class="d-flex justify-content-center align-items-center vh-50">
+    <a href="{% url 'bezeroak-list' %}"><button class="btn btn-primary mx-2">Bezeroak kudeatu</button></a>
+    <a href="{% url 'produktuak-list' %}"><button class="btn btn-primary mx-2">Produktuak kudeatu</button></a>
+    <button class="btn btn-primary mx-2">Eskariak kudeatu</button>
+    <a href="{% url 'alergeno-list' %}"><button class="btn btn-primary mx-2">Alergenoak kudeatu</button></a>
+    <a href="{% url 'iritziak-list' %}"><button class="btn btn-primary mx-2">Iritziak kudeatu</button></a>
+  </div>
+
+  <!-- Sección para el gráfico de productos -->
+  <h2 class="text-center mt-5">Grafikoak</h2>
+  <div class="container">
+    <canvas id="graficoProductos" width="400" height="200"></canvas>
+  </div>
+
+  <!-- Incluir Chart.js desde CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Incluir el archivo JS con el gráfico -->
+  <script src="{% static 'js/grafikoak.js' %}"></script>
+
+  <script>
+    // Pasamos las variables directamente desde Django a JavaScript
+    const nombres = {{ nombres|safe }};
+    const stock = {{ stock|safe }};
+    const precios = {{ precios|safe }};
+    
+    // Llamamos a la función en grafikoak.js para crear el gráfico
+    produktuenGrafikoa(nombres, stock, precios);
+  </script>
+
+{% endblock %}

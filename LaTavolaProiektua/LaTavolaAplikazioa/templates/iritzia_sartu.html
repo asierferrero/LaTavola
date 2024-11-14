@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
+<div class="container d-flex justify-content-center align-items-start vh-100">
+    <div class="row w-100">
+        <div class="col-md-6">
+            <h2 class="text-center">Utzi zure iritzia</h2>
+            <form method="post" class="p-4 border rounded bg-light shadow-sm">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="{{ form.testua.id_for_label }}">Zure iritzia</label>
+                    {{ form.testua }}
+                </div>
+
+                <div class="form-group">
+                    <label>Kalifikazioa:</label>
+                    <div class="rating text-center">
+                        <input type="radio" name="izarrak" id="star5" value="5" {% if form.izarrak.value == "5" %}checked{% endif %}>
+                        <label for="star5" title="5 estrellas">☆</label>
+
+                        <input type="radio" name="izarrak" id="star4" value="4" {% if form.izarrak.value == "4" %}checked{% endif %}>
+                        <label for="star4" title="4 estrellas">☆</label>
+
+                        <input type="radio" name="izarrak" id="star3" value="3" {% if form.izarrak.value == "3" %}checked{% endif %}>
+                        <label for="star3" title="3 estrellas">☆</label>
+
+                        <input type="radio" name="izarrak" id="star2" value="2" {% if form.izarrak.value == "2" %}checked{% endif %}>
+                        <label for="star2" title="2 estrellas">☆</label>
+
+                        <input type="radio" name="izarrak" id="star1" value="1" {% if form.izarrak.value == "1" %}checked{% endif %}>
+                        <label for="star1" title="1 estrella">☆</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Iritzia Bidali</button>
+            </form>
+        </div>
+
+        <div class="col-md-6" id="gomendioak">
+            <h2 class="text-center">Gomendatutako Platerrak</h2>
+            <!-- AJAX -->
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="{% static 'js/saskia.js' %}"></script>
+
+<style>
+    .rating {
+        direction: rtl;
+        unicode-bidi: bidi-override;
+        display: inline-flex;
+        font-size: 2em;
+    }
+    .rating > label {
+        color: #ddd;
+        cursor: pointer;
+    }
+    .rating > input:checked ~ label {
+        color: #f5b301;
+    }
+    .rating > input {
+        display: none;
+    }
+    .rating > label:hover,
+    .rating > label:hover ~ label {
+        color: #f5b301;
+    }
+
+    .container {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    h1,
+    h2 {
+      color: #333;
+      font-weight: 600;
+    }
+    .cart-items p,
+    .total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.2rem;
+    }
+    .price,
+    .total-price {
+      font-weight: bold;
+    }
+    .total-price {
+      color: #dc3545;
+      font-size: 1.4rem;
+    }
+    .recommended-item {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .recommended-img-container {
+      max-width: 100px;
+      margin: 0 auto 10px;
+    }
+    .recommended-img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+    .recommended-text {
+      text-align: center;
+    }
+    .btn-small {
+      padding: 0.2rem 0.6rem;
+      margin: 0 5px;
+      font-size: 0.9rem;
+    }
+    .cart-item-buttons {
+      display: flex;
+      justify-content: end;
+      gap: 0.3rem;
+      flex-grow: 1;
+    }
+    .price {
+      font-weight: bold;
+      width: 60px;
+      text-align: right;
+    }
+</style>
+{% endblock %}

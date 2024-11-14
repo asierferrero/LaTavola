@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mt-4 mb-4 text-center">Alergeno berria gehitu</h1>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+
+    <!-- Alerta general para errores del formulario (solo se muestra una vez) -->
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            <ul class="mb-0">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="POST" class="post-form" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Renderizado de los campos del formulario sin mostrar errores específicos en cada campo -->
+        <div class="mb-3">
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Botones de acción -->
+        <button type="submit" class="btn btn-primary">Gorde</button>
+        <a href="{% url 'alergeno-list' %}" class="btn btn-secondary">Atzera</a>
+    </form>
+</div>
+{% endblock %}
