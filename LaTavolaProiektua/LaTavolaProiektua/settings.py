@@ -24,14 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-y)@tvlal5hd!bs4z*c896$e(=%fu2mmu*154jl0*grrupf@1z@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['latavola.eus', '192.168.73.22']
 
 SITE_ID = 5
 
 # HAU ALDATU LOKALEAN EZ BADA ERABILTZEN !!!!!!!!!!!
-SITE_URL = 'http://localhost:8000'
+SITE_URL = 'http://192.168.73.22:8000'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -111,8 +111,8 @@ WSGI_APPLICATION = 'LaTavolaProiektua.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'latavolaprueba',
-        'USER': 'root',
+        'NAME': 'latavola',
+        'USER': 'prueba3',
         'PASSWORD': 'Admin123',
         'HOST': 'localhost',
         'PORT': '3306',
