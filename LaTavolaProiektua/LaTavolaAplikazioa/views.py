@@ -553,4 +553,19 @@ def ordainketa_zuzena(request):
 def ordainketa_ezeztatua(request):
     return render(request, 'ordainketa_ezeztatua.html') 
 
+@login_required
+def admin_eskariak_list(request):
+    if not request.user.is_staff:
+        return redirect('home')
 
+    query = request.GET.get('q')  # Obtiene el name del input
+    if query:
+        # Filtra el nombre segun el input metido
+        eskaria_list = Eskaria.objects.filter(
+            Q(produktua__icontains=query)
+        )
+    else:
+        # Si no lo encuentra aparece toda la lista
+        eskaria_list = Eskaria.objects.all()
+
+    return render(request, 'eskari_zerrenda.html', {'eskariak_list': eskaria_list})
