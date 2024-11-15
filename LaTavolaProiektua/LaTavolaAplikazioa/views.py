@@ -21,6 +21,7 @@ from rest_framework.authtoken.models import Token
 from django.conf import settings
 from django.urls import reverse
 
+
 User = get_user_model()
 
 
@@ -152,12 +153,17 @@ def register_view(request):
 
 def send_verification_email(user):
     try:
-        verification_url = f"{settings.SITE_URL}/verify/{user.id}/"
+        # Remove :8000 from SITE_URL if it exists
+        site_url = settings.SITE_URL.split(':8000')[0]
+        
+        verification_url = f"{site_url}/verify/{user.id}/"
         subject = "Zure kontua egiaztatu"
         message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {verification_url}"
         send_mail(subject, message, settings.EMAIL_HOST_USER, [user.username])
     except Exception as e:
         print(f"Errorea emaila bidaltzerakoan: {e}")
+
+
 
 
 def verify_view(request, id):
