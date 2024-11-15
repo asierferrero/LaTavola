@@ -66,7 +66,7 @@ class Produktua(models.Model):
 
 class Eskaria(models.Model):
     id = models.AutoField(primary_key=True)
-    erabiltzailea = models.ForeignKey(User, on_delete=models.CASCADE)
+    erabiltzailea = models.ForeignKey(User, on_delete=models.CASCADE)  
     produktua = models.ForeignKey(Produktua, on_delete=models.CASCADE)
     langilea = models.ForeignKey(Langilea, on_delete=models.CASCADE)
     banatzailea = models.CharField(max_length=100)

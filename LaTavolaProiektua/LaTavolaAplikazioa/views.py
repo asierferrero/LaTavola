@@ -567,5 +567,5 @@ def admin_eskariak_list(request):
         # Si no lo encuentra aparece toda la lista
         eskaria_list = Eskaria.objects.all()
 
-    return render(request, 'eskari_zerrenda.html', {'eskari_list': eskaria_list})
+    return render(request, 'eskari_zerrenda.html', {'eskariak_list': eskaria_list})
 
