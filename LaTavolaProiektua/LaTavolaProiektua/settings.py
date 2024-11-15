@@ -28,7 +28,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['latavola.eus', '192.168.73.22']
 
-SITE_ID = 5
+SITE_ID = 6
 
 # HAU ALDATU LOKALEAN EZ BADA ERABILTZEN !!!!!!!!!!!
 SITE_URL = 'http://192.168.73.22'
