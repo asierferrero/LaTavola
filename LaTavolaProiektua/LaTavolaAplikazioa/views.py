@@ -121,7 +121,7 @@ def send_password_email(Email):
     try:
 
         # hay que cambiar el user id
-        verification_url = f"{settings.SITE_URL}/verify_password/{Email}/"
+        verification_url = f"settings.SITE_URL/verify_password/{Email}/"
         subject = "Aldatu ezazu pasahitza"
         message = f"Egin klik esteka honetan zure pasahitza aldatzeko: {
             verification_url}"
@@ -153,7 +153,7 @@ def register_view(request):
 
 def send_verification_email(user):
     try:
-        verification_url = f"{settings.SITE_URL}/verify/{user.id}/"
+        verification_url = f"settings.SITE_URL/verify/{user.id}/"
         subject = "Zure kontua egiaztatu"
         message = f"Egin klik esteka honetan zure kontua egiaztatzeko: {
             verification_url}"

@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['latavola.eus', '192.168.73.22']
 SITE_ID = 5
 
 # HAU ALDATU LOKALEAN EZ BADA ERABILTZEN !!!!!!!!!!!
-SITE_URL = 'http://192.168.73.22:8000'
+SITE_URL = 'http://192.168.73.22'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
